@@ -46,16 +46,37 @@ h2{
   width: 500px;
 }
 
-.middle_note1{
+.middle_1{
   float: left;
   width: 40%;
   height: auto;
   padding-right: 50px;
 }
 
-.middle_note2{
+.middle_2{
   float: left;
   width: 40%;
+  height: auto;
+  padding-right: 50px;
+}
+
+.middle_1over3{
+  float: left;
+  width: 26%;
+  height: auto;
+  padding-right: 50px;
+}
+
+.middle_2over3{
+  float: left;
+  width: 26%;
+  height: auto;
+  padding-right: 50px;
+}
+
+.middle_3over3{
+  float: left;
+  width: 26%;
   height: auto;
   padding-right: 50px;
 }
@@ -76,7 +97,7 @@ h2{
 }
 
 .font{
-  font-family: 'Roboto', 'Nanum Gothic', sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
   font-weight: 500;
 }
 
