@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 
+/* div{
+  border: 1px solid red;
+} */
+
 body{
   background-color: #d9d9d9;
 }
@@ -14,16 +18,9 @@ h2{
   height: 100px;
 }
 
-.top img{
-  margin-top: 30px;
-  width: 100px;
-  float: right;
-}
-
 .left{
   float: left;
   width: 10%;
-  height: auto;
 }
 
 .left a{
@@ -40,56 +37,32 @@ h2{
 .middle{
   float: left;
   width: 80%;
-  height: auto;
 }
 
-.middle img{
+.middle .main-img{
   display: block;
+  width: 100%;
+  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
-  width: 500px;
 }
 
-.middle_1{
+.middle_1, .middle_2{
   float: left;
-  width: 40%;
-  height: auto;
-  padding-right: 50px;
+  width: 50%;
+  padding-right: 20px;
 }
 
-.middle_2{
+.middle_1over3, .middle_2over3, .middle_3over3{
   float: left;
-  width: 40%;
-  height: auto;
-  padding-right: 50px;
-}
-
-.middle_1over3{
-  float: left;
-  width: 26%;
-  height: auto;
-  padding-right: 50px;
-}
-
-.middle_2over3{
-  float: left;
-  width: 26%;
-  height: auto;
-  padding-right: 50px;
-}
-
-.middle_3over3{
-  float: left;
-  width: 26%;
-  height: auto;
-  padding-right: 50px;
+  width: 33%;
+  padding-right: 20px;
 }
 
 .right{
-  display: block;
-  float: left;
+  display: inline-block;
+  float: right;
   width: 10%;
-  height: auto;
 }
 
 .right img{
@@ -98,6 +71,13 @@ h2{
   margin-bottom: 5%;
   width: 25px;
   float: right;
+}
+
+#logo-right{
+  width: 100px;
+  float: right;
+  position: relative;
+  top: -75px;
 }
 
 .font{
@@ -112,17 +92,26 @@ h2{
 .music img{
   width: 50%
 }
-/* @media (max-width : 800px){
-  .top{
-    background-color: red;
-  }
-  .middle img{
-    width: 300px;
-  }
-  .left a{
-    font-size: 8px;
-  }
+
+@media (max-width : 991px){
   .right img{
-    width: 13px;
+    display: block;
+    margin-left: 50%;
+    margin-bottom: 5%;
+    width: 25px;
+    float: right;
   }
-} */
+}
+
+@media (max-width : 767px){
+  .middle_1, .middle_2{
+    float: left;
+    width: 100%;
+    padding-right: 0px;
+  }
+  .middle_1over3, .middle_2over3, .middle_3over3{
+    float: left;
+    width: 100%;
+    padding-right: 0px;
+  }
+}
