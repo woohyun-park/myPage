@@ -104,14 +104,10 @@ h2{
 }
 
 @media (max-width : 767px){
-  .middle_1, .middle_2{
+  .middle_1, .middle_2, .middle_1over3, .middle_2over3, .middle_3over3{
     float: left;
     width: 100%;
     padding-right: 0px;
-  }
-  .middle_1over3, .middle_2over3, .middle_3over3{
-    float: left;
-    width: 100%;
-    padding-right: 0px;
+    padding-left: 5%;
   }
 }
