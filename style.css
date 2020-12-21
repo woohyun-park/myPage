@@ -104,6 +104,7 @@ button{
   margin-right: auto;
   background-color: transparent;
   width:7%;
+  min-width: 50px;
 }
 
 button img{
