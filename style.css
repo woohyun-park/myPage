@@ -96,6 +96,28 @@ h2 ~ img{
   padding-bottom: 10px;
 }
 
+button{
+  appearance: none;
+  border: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  width:7%;
+}
+
+button img{
+  width: 20px;
+}
+
+button img:hover{
+  width: 22px;
+}
+
+button:focus{
+  outline: none;
+}
+
 @media (max-width : 991px){
   .right img{
     display: block;
