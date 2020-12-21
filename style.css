@@ -1,15 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 
-div{
+/* div{
   border: 1px solid red;
-}
-
-button{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
+} */
 
 body{
   background-color: #d9d9d9;
@@ -97,6 +91,28 @@ h2{
 
 .music img{
   width: 50%
+}
+
+button{
+  appearance: none;
+  border: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  width:7%;
+}
+
+button img{
+  width: 20px;
+}
+
+button img:hover{
+  width: 22px;
+}
+
+button:focus{
+  outline: none;
 }
 
 @media (max-width : 991px){

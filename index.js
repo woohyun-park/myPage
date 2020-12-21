@@ -1,13 +1,32 @@
 function night(){
-  $('body').style.background='black';
-  $("#title").setAttribute("src", "title-night.png");
-  $("#contact").setAttribute("src", "contact-night.png");
-}
-
-function day(){
-  $('body').style.background='#d9d9d9';
-  $("#title").setAttribute("src", "title.png");
-  $("#contact").setAttribute("src", "contact.png");
+  if ($("#wave").getAttribute("value") == 'night') {
+    document.querySelector('#menu1').style.color = 'black';
+    document.querySelector('#menu2').style.color = 'black';
+    document.querySelector('#menu3').style.color = 'black';
+    document.querySelector('#menu4').style.color = 'black';
+    $('body').style.background='#d9d9d9';
+    $("#title").setAttribute("src", "title.png");
+    $("#contact").setAttribute("src", "contact.png");
+    $("#icon-instagram").setAttribute("src", "icon-instagram.png");
+    $("#icon-blog").setAttribute("src", "icon-blog.png");
+    $("#icon-velog").setAttribute("src", "icon-velog.png");
+    $("#wave").setAttribute("src", "wave.png");
+    $("#wave").setAttribute("value", "day");
+  }
+  else{
+    document.querySelector('#menu1').style.color = '#d9d9d9';
+    document.querySelector('#menu2').style.color = '#d9d9d9';
+    document.querySelector('#menu3').style.color = '#d9d9d9';
+    document.querySelector('#menu4').style.color = '#d9d9d9';
+    $('body').style.background='#3b5998';
+    $("#title").setAttribute("src", "title-night.png");
+    $("#contact").setAttribute("src", "contact-night.png");
+    $("#icon-instagram").setAttribute("src", "icon-instagram-night.png");
+    $("#icon-blog").setAttribute("src", "icon-blog-night.png");
+    $("#icon-velog").setAttribute("src", "icon-velog-night.png");
+    $("#wave").setAttribute("src", "wave-night.png");
+    $("#wave").setAttribute("value", "night");
+  }
 }
 
 // function $
