@@ -4,6 +4,7 @@ function night(){
     document.querySelector('#menu2').style.color = 'black';
     document.querySelector('#menu3').style.color = 'black';
     document.querySelector('#menu4').style.color = 'black';
+    document.querySelector('#menu5').style.color = 'black';
     $('body').style.background='#d9d9d9';
     $("#title").setAttribute("src", "title.png");
     $("#contact").setAttribute("src", "contact.png");
@@ -18,6 +19,7 @@ function night(){
     document.querySelector('#menu2').style.color = '#d9d9d9';
     document.querySelector('#menu3').style.color = '#d9d9d9';
     document.querySelector('#menu4').style.color = '#d9d9d9';
+    document.querySelector('#menu5').style.color = '#d9d9d9';
     $('body').style.background='#3b5998';
     $("#title").setAttribute("src", "title-night.png");
     $("#contact").setAttribute("src", "contact-night.png");
