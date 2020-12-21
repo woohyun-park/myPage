@@ -1,10 +1,11 @@
 function night(){
   if ($("#wave").getAttribute("value") == 'night') {
-    document.querySelector('#menu1').style.color = 'black';
-    document.querySelector('#menu2').style.color = 'black';
-    document.querySelector('#menu3').style.color = 'black';
-    document.querySelector('#menu4').style.color = 'black';
-    document.querySelector('#menu5').style.color = 'black';
+    var menus = document.querySelectorAll('#menu');
+    var i = 0;
+    while(i < menus.length){
+      menus[i].style.color = 'black';
+      i=i+1;
+    }
     $('body').style.background='#d9d9d9';
     $("#title").setAttribute("src", "title.png");
     $("#contact").setAttribute("src", "contact.png");
@@ -15,11 +16,12 @@ function night(){
     $("#wave").setAttribute("value", "day");
   }
   else{
-    document.querySelector('#menu1').style.color = '#d9d9d9';
-    document.querySelector('#menu2').style.color = '#d9d9d9';
-    document.querySelector('#menu3').style.color = '#d9d9d9';
-    document.querySelector('#menu4').style.color = '#d9d9d9';
-    document.querySelector('#menu5').style.color = '#d9d9d9';
+    var menus = document.querySelectorAll('#menu');
+    var i = 0;
+    while(i < menus.length){
+      menus[i].style.color = '#d9d9d9';
+      i=i+1;
+    }
     $('body').style.background='#3b5998';
     $("#title").setAttribute("src", "title-night.png");
     $("#contact").setAttribute("src", "contact-night.png");
