@@ -1,13 +1,50 @@
 function night(){
-  $('body').style.background='black';
-  $("#title").setAttribute("src", "title-night.png");
-  $("#contact").setAttribute("src", "contact-night.png");
-}
+  if ($("#wave").getAttribute("value") == 'night') {
+    var menus = document.querySelectorAll('.menu');
+    var i = 0;
+    while(i < menus.length){
+      menus[i].style.color = 'black';
+      i=i+1;
+    }
+    $('body').style.background='#d9d9d9';
+    $("#title").setAttribute("src", "title.png");
+    $("#contact").setAttribute("src", "contact.png");
+    $("#icon-instagram").setAttribute("src", "icon-instagram.png");
+    $("#icon-blog").setAttribute("src", "icon-blog.png");
+    $("#icon-velog").setAttribute("src", "icon-velog.png");
+    $("#wave").setAttribute("src", "wave.png");
+    $("#wave").setAttribute("value", "day");
 
-function day(){
-  $('body').style.background='#d9d9d9';
-  $("#title").setAttribute("src", "title.png");
-  $("#contact").setAttribute("src", "contact.png");
+    $("#menu-1").setAttribute("href", "index.html");
+    $("#menu-2").setAttribute("href", "diary/diary.html");
+    $("#menu-3").setAttribute("href", "note/note.html");
+    $("#menu-4").setAttribute("href", "music/music.html");
+    $("#menu-5").setAttribute("href", "design/design.html");
+    $("#title-link").setAttribute("href", "index.html");
+  }
+  else{
+    var menus = document.querySelectorAll('.menu');
+    var i = 0;
+    while(i < menus.length){
+      menus[i].style.color = '#d9d9d9';
+      i=i+1;
+    }
+    $('body').style.background='#3b5998';
+    $("#title").setAttribute("src", "title-night.png");
+    $("#contact").setAttribute("src", "contact-night.png");
+    $("#icon-instagram").setAttribute("src", "icon-instagram-night.png");
+    $("#icon-blog").setAttribute("src", "icon-blog-night.png");
+    $("#icon-velog").setAttribute("src", "icon-velog-night.png");
+    $("#wave").setAttribute("src", "wave-night.png");
+    $("#wave").setAttribute("value", "night");
+
+    $("#menu-1").setAttribute("href", "index-night.html");
+    $("#menu-2").setAttribute("href", "diary/diary-night.html");
+    $("#menu-3").setAttribute("href", "note/note-night.html");
+    $("#menu-4").setAttribute("href", "music/music-night.html");
+    $("#menu-5").setAttribute("href", "design/design-night.html");
+    $("#title-link").setAttribute("href", "index-night.html");
+  }
 }
 
 // function $
