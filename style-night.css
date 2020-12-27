@@ -6,9 +6,10 @@
 } */
 
 body{
-  background-color: #d9d9d9;
+  background-color: #3b5998;
   font-family: 'Roboto', 'Nanum Gothic', sans-serif;
   font-size: 15px;
+  color: #d9d9d9;
 }
 
 .top{
@@ -23,7 +24,7 @@ body{
 
 a, a:link, a:visited{
   display: block;
-  color: black;
+  color: #d9d9d9;
   text-decoration: none;
 }
 

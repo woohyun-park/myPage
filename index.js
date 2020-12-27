@@ -1,6 +1,6 @@
 function night(){
   if ($("#wave").getAttribute("value") == 'night') {
-    var menus = document.querySelectorAll('#menu');
+    var menus = document.querySelectorAll('.menu');
     var i = 0;
     while(i < menus.length){
       menus[i].style.color = 'black';
@@ -14,9 +14,16 @@ function night(){
     $("#icon-velog").setAttribute("src", "icon-velog.png");
     $("#wave").setAttribute("src", "wave.png");
     $("#wave").setAttribute("value", "day");
+
+    $("#menu-1").setAttribute("href", "index.html");
+    $("#menu-2").setAttribute("href", "diary/diary.html");
+    $("#menu-3").setAttribute("href", "note/note.html");
+    $("#menu-4").setAttribute("href", "music/music.html");
+    $("#menu-5").setAttribute("href", "design/design.html");
+    $("#title-link").setAttribute("href", "index.html");
   }
   else{
-    var menus = document.querySelectorAll('#menu');
+    var menus = document.querySelectorAll('.menu');
     var i = 0;
     while(i < menus.length){
       menus[i].style.color = '#d9d9d9';
@@ -30,6 +37,13 @@ function night(){
     $("#icon-velog").setAttribute("src", "icon-velog-night.png");
     $("#wave").setAttribute("src", "wave-night.png");
     $("#wave").setAttribute("value", "night");
+
+    $("#menu-1").setAttribute("href", "index-night.html");
+    $("#menu-2").setAttribute("href", "diary/diary-night.html");
+    $("#menu-3").setAttribute("href", "note/note-night.html");
+    $("#menu-4").setAttribute("href", "music/music-night.html");
+    $("#menu-5").setAttribute("href", "design/design-night.html");
+    $("#title-link").setAttribute("href", "index-night.html");
   }
 }
 
