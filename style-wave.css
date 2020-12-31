@@ -5,6 +5,24 @@
   border: 1px solid red;
 } */
 
+.three{
+  column-width:270px;
+  column-gap: 15px;
+}
+
+.imgBlock{
+  display: inline-block;
+  margin:0;
+  padding:0px 10px 0px 10px;
+}
+
+.imgBlock img{
+  width: 100%;
+  padding-bottom: 5%;
+}
+
+
+
 body{
   background-color: #3b5998;
   font-family: 'Roboto', 'Nanum Gothic', sans-serif;
@@ -45,18 +63,6 @@ a, a:link, a:visited{
   margin-right: auto;
 }
 
-.middle_1, .middle_2{
-  float: left;
-  width: 50%;
-  padding-right: 20px;
-}
-
-.middle_1over3, .middle_2over3, .middle_3over3{
-  float: left;
-  width: 33%;
-  padding-right: 20px;
-}
-
 .right{
   display: inline-block;
   float: right;
@@ -80,10 +86,6 @@ a, a:link, a:visited{
 
 .icon:hover{
   width: 26px;
-}
-
-.music img, .design img{
-  width: 100%;
 }
 
 /*This is for design.html*/
@@ -122,14 +124,5 @@ button:focus{
     margin-bottom: 5%;
     width: 25px;
     float: right;
-  }
-}
-
-@media (max-width : 767px){
-  .middle_1, .middle_2, .middle_1over3, .middle_2over3, .middle_3over3{
-    float: left;
-    width: 100%;
-    padding-right: 0px;
-    padding-left: 5%;
   }
 }
