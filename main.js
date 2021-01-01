@@ -10,14 +10,14 @@ function homeTemplateHTML(list){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="./img/favicon.ico">
-    <link rel="shortcut icon" href="./img/favicon.ico">
-    <meta property="og:image" content="kakao.png">
+    <link rel="icon" href="/style?id=./img/favicon.ico">
+    <link rel="shortcut icon" href="/style?id=./img/favicon.ico">
+    <meta property="og:image" content="/style?id=kakao.png">
     <meta property="og:title" content="@iamdooddi">
     <meta property="og:description" content="wachu lookin">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="index.js"></script>
+    <link rel="stylesheet" href="/style?id=./style.css&type=css">
+    <script type="text/javascript" src="/style?id=./index.js&type=js"></script>
     <script src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
     <title>@iamdooddi</title>
   </head>
@@ -29,15 +29,15 @@ function homeTemplateHTML(list){
       ${list}
       </div>
       <div class="middle">
-        <a href="/" id="title-link"><img id="title" class="main-img" src="./img/normal/title.png" alt="title"></a>
-        <img id="contact" class="main-img" src="./img/normal/contact.png" alt="contact">
-        <button onclick="theme()"><img id="wave" src="./img/normal/themeButton.png" alt="wave" value="normal" cite="wave by Phoenix Dungeon from the Noun Project"></button>
+        <a href="/" id="title-link"><img id="title" class="main-img" src="/style?id=./img/normal/title.png" alt="title"></a>
+        <img id="contact" class="main-img" src="/style?id=./img/normal/contact.png" alt="contact">
+        <button onclick="theme()"><img id="wave" src="/style?id=./img/normal/themeButton.png" alt="wave" value="normal" cite="wave by Phoenix Dungeon from the Noun Project"></button>
       </div>
       <div class="right">
         <h1>
-          <a href="https://www.instagram.com/iamdooddi/" target="_blank"><img class="icon" id="icon-instagram" src="./img/normal/icon-instagram.png" alt="instagram"></a>
-          <a href="https://blog.naver.com/a-eve" target="_blank"><img class="icon" id="icon-blog" src="./img/normal/icon-blog.png" alt="blog"></a>
-          <a href="https://velog.io/@woohyun_park" target="_blank"><img class="icon" id="icon-velog" src="./img/normal/icon-velog.png" alt="velog"></a>
+          <a href="https://www.instagram.com/iamdooddi/" target="_blank"><img class="icon" id="icon-instagram" src="/style?id=./img/normal/icon-instagram.png" alt="instagram"></a>
+          <a href="https://blog.naver.com/a-eve" target="_blank"><img class="icon" id="icon-blog" src="/style?id=./img/normal/icon-blog.png" alt="blog"></a>
+          <a href="https://velog.io/@woohyun_park" target="_blank"><img class="icon" id="icon-velog" src="/style?id=./img/normal/icon-velog.png" alt="velog"></a>
         </h1>
       </div>
     </div>
@@ -59,7 +59,7 @@ function menuTemplate(menulist, textlist){
     <link rel="shortcut icon" href="../img/favicon.ico">
     <title>@iamdooddi</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="/style?id=./style.css&type=css">
   </head>
   <body>
     <div class="container">
@@ -75,7 +75,7 @@ function menuTemplate(menulist, textlist){
         </div>
       </div>
       <div class="right">
-        <a href="/"><img id="logo-right" src="../img/normal/logo-right.png" alt="logo-right"></a>
+        <a href="/"><img id="logo-right" src="/style?id=./img/normal/logo-right.png" alt="logo-right"></a>
       </div>
     </div>
   </body>
@@ -114,6 +114,8 @@ function getListAndText(title, list){
   return resultList;
 }
 
+
+
 let app = http.createServer(function(request, response){
   let _url = request.url;
   let queryData = url.parse(_url, true).query;
@@ -147,6 +149,23 @@ let app = http.createServer(function(request, response){
         })
       })
     }
+  }
+  else if(pathname === '/style'){
+    let file = url.parse(_url, true).query.id;
+    console.log(url.parse(_url, true).query.id);
+    console.log(url.parse(_url, true).query.type);
+    fs.readFile(file, function(err, file){
+      if(url.parse(_url, true).query.type == 'css'){
+        response.writeHead(200, {'Content-Type': 'text/css'});
+      }
+      else if(url.parse(_url, true).query.type == 'js'){
+        response.writeHead(200, {'Content-Type': 'text/javascript'});
+      }
+      else{
+        response.writeHead(200, {'Content-Type': 'image/png'});
+      }
+      response.end(file);
+    })
   }
   else{
     response.writeHead(404);
