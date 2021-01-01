@@ -1,0 +1,5 @@
+block: 한줄에 하나를 표현해주는 상자<br>
+inline-block: 한 줄에 여러개가 표현가능한 상자<br>
+inline: 컨텐츠만을 표현<br>
+﻿*div의 기본 디스플레이: block<br>
+*span의 기본 디스플레이: inline<br>

@@ -1,18 +1,5 @@
-const express = require('express');
-const app = express();
-
-app.use(express.static(__dirname + '/public'));
-
-app.get('/', (req, res) => {
-  res.status(200).sendFile(__dirname + '/index.html');
-})
-
-app.listen(3000, () => {
-  console.log('Server is running');
-})
-
-function night(){
-  if ($("#wave").getAttribute("value") == 'night') {
+function theme(){
+  if ($("#wave").getAttribute("value") == 'wave') {
     var menus = document.querySelectorAll('.menu');
     var i = 0;
     while(i < menus.length){
@@ -20,13 +7,13 @@ function night(){
       i=i+1;
     }
     $('body').style.background='#d9d9d9';
-    $("#title").setAttribute("src", "title.png");
-    $("#contact").setAttribute("src", "contact.png");
-    $("#icon-instagram").setAttribute("src", "icon-instagram.png");
-    $("#icon-blog").setAttribute("src", "icon-blog.png");
-    $("#icon-velog").setAttribute("src", "icon-velog.png");
-    $("#wave").setAttribute("src", "wave.png");
-    $("#wave").setAttribute("value", "day");
+    $("#title").setAttribute("src", "./img/normal/title.png");
+    $("#contact").setAttribute("src", "./img/normal/contact.png");
+    $("#icon-instagram").setAttribute("src", "./img/normal/icon-instagram.png");
+    $("#icon-blog").setAttribute("src", "./img/normal/icon-blog.png");
+    $("#icon-velog").setAttribute("src", "./img/normal/icon-velog.png");
+    $("#wave").setAttribute("src", "./img/normal/themeButton.png");
+    $("#wave").setAttribute("value", "normal");
 
     $("#menu-1").setAttribute("href", "index.html");
     $("#menu-2").setAttribute("href", "diary/diary.html");
@@ -43,20 +30,20 @@ function night(){
       i=i+1;
     }
     $('body').style.background='#3b5998';
-    $("#title").setAttribute("src", "title-night.png");
-    $("#contact").setAttribute("src", "contact-night.png");
-    $("#icon-instagram").setAttribute("src", "icon-instagram-night.png");
-    $("#icon-blog").setAttribute("src", "icon-blog-night.png");
-    $("#icon-velog").setAttribute("src", "icon-velog-night.png");
-    $("#wave").setAttribute("src", "wave-night.png");
-    $("#wave").setAttribute("value", "night");
+    $("#title").setAttribute("src", "./img/wave/title-wave.png");
+    $("#contact").setAttribute("src", "./img/wave/contact-wave.png");
+    $("#icon-instagram").setAttribute("src", "./img/wave/icon-instagram-wave.png");
+    $("#icon-blog").setAttribute("src", "./img/wave/icon-blog-wave.png");
+    $("#icon-velog").setAttribute("src", "./img/wave/icon-velog-wave.png");
+    $("#wave").setAttribute("src", "./img/wave/themeButton-wave.png");
+    $("#wave").setAttribute("value", "wave");
 
-    $("#menu-1").setAttribute("href", "index-night.html");
-    $("#menu-2").setAttribute("href", "diary/diary-night.html");
-    $("#menu-3").setAttribute("href", "note/note-night.html");
-    $("#menu-4").setAttribute("href", "music/music-night.html");
-    $("#menu-5").setAttribute("href", "design/design-night.html");
-    $("#title-link").setAttribute("href", "index-night.html");
+    $("#menu-1").setAttribute("href", "index-wave.html");
+    $("#menu-2").setAttribute("href", "diary/diary-wave.html");
+    $("#menu-3").setAttribute("href", "note/note-wave.html");
+    $("#menu-4").setAttribute("href", "music/music-wave.html");
+    $("#menu-5").setAttribute("href", "design/design-wave.html");
+    $("#title-link").setAttribute("href", "index-wave.html");
   }
 }
 
