@@ -1,5 +1,5 @@
 function theme(){
-  if ($("#wave").getAttribute("value") == 'wave') {
+  if ($("#theme").getAttribute("value") == 'wave') {
     var menus = document.querySelectorAll('.menu');
     var i = 0;
     while(i < menus.length){
@@ -7,20 +7,29 @@ function theme(){
       i=i+1;
     }
     $('body').style.background='#d9d9d9';
-    $("#title").setAttribute("src", "./img/normal/title.png");
-    $("#contact").setAttribute("src", "./img/normal/contact.png");
-    $("#icon-instagram").setAttribute("src", "./img/normal/icon-instagram.png");
-    $("#icon-blog").setAttribute("src", "./img/normal/icon-blog.png");
-    $("#icon-velog").setAttribute("src", "./img/normal/icon-velog.png");
-    $("#wave").setAttribute("src", "./img/normal/themeButton.png");
-    $("#wave").setAttribute("value", "normal");
+    $("#title").setAttribute("src", "/style?id=./img/normal/title.png");
+    $("#contact").setAttribute("src", "/style?id=./img/normal/contact.png");
+    $("#icon-instagram").setAttribute("src", "/style?id=./img/normal/icon-instagram.png");
+    $("#icon-blog").setAttribute("src", "/style?id=./img/normal/icon-blog.png");
+    $("#icon-velog").setAttribute("src", "/style?id=./img/normal/icon-velog.png");
+    $("#theme").setAttribute("src", "/style?id=./img/normal/themeButton.png");
+    $("#theme").setAttribute("value", "normal");
+    // let fs = require('fs');
+// <a href='?id=${list[i]}' id="menu-${i+1}" class="menu">${list[i]} </a>
+    // fs.readdir('./tab', function(error, list){
+    //   console.log(list);
+    //   let i = 0;
+    //   while(i < list.length){
+    //     $(`#menu-${i+1}`).setAttribute("href", `?id=${list[i]}&theme=normal`);
+    //   }
+    // })
 
-    $("#menu-1").setAttribute("href", "index.html");
-    $("#menu-2").setAttribute("href", "diary/diary.html");
-    $("#menu-3").setAttribute("href", "note/note.html");
-    $("#menu-4").setAttribute("href", "music/music.html");
-    $("#menu-5").setAttribute("href", "design/design.html");
-    $("#title-link").setAttribute("href", "index.html");
+    $("#menu-0").setAttribute("href", "/");
+    $("#menu-1").setAttribute("href", "?id=diary");
+    $("#menu-2").setAttribute("href", "?id=note");
+    $("#menu-3").setAttribute("href", "?id=music");
+    $("#menu-4").setAttribute("href", "?id=design");
+    $("#title-link").setAttribute("href", "/");
   }
   else{
     var menus = document.querySelectorAll('.menu');
@@ -30,20 +39,28 @@ function theme(){
       i=i+1;
     }
     $('body').style.background='#3b5998';
-    $("#title").setAttribute("src", "./img/wave/title-wave.png");
-    $("#contact").setAttribute("src", "./img/wave/contact-wave.png");
-    $("#icon-instagram").setAttribute("src", "./img/wave/icon-instagram-wave.png");
-    $("#icon-blog").setAttribute("src", "./img/wave/icon-blog-wave.png");
-    $("#icon-velog").setAttribute("src", "./img/wave/icon-velog-wave.png");
-    $("#wave").setAttribute("src", "./img/wave/themeButton-wave.png");
-    $("#wave").setAttribute("value", "wave");
+    $("#title").setAttribute("src", "/style?id=./img/wave/title.png");
+    $("#contact").setAttribute("src", "/style?id=./img/wave/contact.png");
+    $("#icon-instagram").setAttribute("src", "/style?id=./img/wave/icon-instagram.png");
+    $("#icon-blog").setAttribute("src", "/style?id=./img/wave/icon-blog.png");
+    $("#icon-velog").setAttribute("src", "/style?id=./img/wave/icon-velog.png");
+    $("#theme").setAttribute("src", "/style?id=./img/wave/themeButton.png");
+    $("#theme").setAttribute("value", "wave");
 
-    $("#menu-1").setAttribute("href", "index-wave.html");
-    $("#menu-2").setAttribute("href", "diary/diary-wave.html");
-    $("#menu-3").setAttribute("href", "note/note-wave.html");
-    $("#menu-4").setAttribute("href", "music/music-wave.html");
-    $("#menu-5").setAttribute("href", "design/design-wave.html");
-    $("#title-link").setAttribute("href", "index-wave.html");
+    // let fs = require('fs');
+    // fs.readdir('./tab', function(error, list){
+    //   let i = 0;
+    //   while(i < list.length){
+    //     $(`#menu-${i+1}`).setAttribute("href", `?id=${list[i]}&theme=wave`);
+    //   }
+    // })
+
+    $("#menu-0").setAttribute("href", "/?theme=wave");
+    $("#menu-1").setAttribute("href", "?id=diary&theme=wave");
+    $("#menu-2").setAttribute("href", "?id=note&theme=wave");
+    $("#menu-3").setAttribute("href", "?id=music&theme=wave");
+    $("#menu-4").setAttribute("href", "?id=design&theme=wave");
+    $("#title-link").setAttribute("href", "/?theme=wave");
   }
 }
 
