@@ -14,15 +14,6 @@ function theme(){
     $("#icon-velog").setAttribute("src", "/style?id=./img/normal/icon-velog.png");
     $("#theme").setAttribute("src", "/style?id=./img/normal/themeButton.png");
     $("#theme").setAttribute("value", "normal");
-    // let fs = require('fs');
-// <a href='?id=${list[i]}' id="menu-${i+1}" class="menu">${list[i]} </a>
-    // fs.readdir('./tab', function(error, list){
-    //   console.log(list);
-    //   let i = 0;
-    //   while(i < list.length){
-    //     $(`#menu-${i+1}`).setAttribute("href", `?id=${list[i]}&theme=normal`);
-    //   }
-    // })
 
     $("#menu-0").setAttribute("href", "/");
     $("#menu-1").setAttribute("href", "?id=diary");
@@ -46,14 +37,6 @@ function theme(){
     $("#icon-velog").setAttribute("src", "/style?id=./img/wave/icon-velog.png");
     $("#theme").setAttribute("src", "/style?id=./img/wave/themeButton.png");
     $("#theme").setAttribute("value", "wave");
-
-    // let fs = require('fs');
-    // fs.readdir('./tab', function(error, list){
-    //   let i = 0;
-    //   while(i < list.length){
-    //     $(`#menu-${i+1}`).setAttribute("href", `?id=${list[i]}&theme=wave`);
-    //   }
-    // })
 
     $("#menu-0").setAttribute("href", "/?theme=wave");
     $("#menu-1").setAttribute("href", "?id=diary&theme=wave");
