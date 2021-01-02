@@ -4,6 +4,23 @@
 /* div{
   border: 1px solid red;
 } */
+.three{
+  column-width:270px;
+  column-gap: 15px;
+}
+
+.imgBlock{
+  display: inline-block;
+  margin:0;
+  padding:0px 10px 0px 10px;
+  width: 100%;
+}
+
+.imgBlock img{
+  width: 100%;
+  padding-bottom: 5%;
+}
+
 body{
   background-color: #d9d9d9;
   font-family: 'Roboto', 'Nanum Gothic', sans-serif;

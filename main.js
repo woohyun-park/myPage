@@ -126,23 +126,42 @@ function getList(list, theme){
   return resultList;
 }
 
-function getListAndText(title, list){
+function getListAndText(title, list, imgList){
   let resultList = '';
   let i = 0;
-  while(i < list.length){
-    resultList = resultList + `
-    <div class="imgBlock">
-      <h2>${list[i]}</h2>
-      <div class="font">
-    `
-    //<img src="./img/sogumm-위로.jpg" alt="sogumm-위로">
-    let text = fs.readFileSync(`./tab/${title}/data/${list[i]}`, 'utf8');
-    resultList = resultList + `${text}
+  if(imgList == null){
+    while(i < list.length){
+      resultList = resultList + `
+      <div class="imgBlock">
+        <h2>${list[i]}</h2>
+        <div class="font">
+      `
+      //<img src="./img/sogumm-위로.jpg" alt="sogumm-위로">
+      let text = fs.readFileSync(`./tab/${title}/data/${list[i]}`, 'utf8');
+      resultList = resultList + `${text}
+        </div>
+        <br>
       </div>
-      <br>
-    </div>
-    `;
-    i = i + 1;
+      `;
+      i = i + 1;
+    }
+  }
+  else{
+    while(i < list.length){
+      resultList = resultList + `
+      <div class="imgBlock">
+        <img src="/style?id=./tab/${title}/img/${imgList[i]}" alt="${imgList[i]}">
+        <h2>${list[i]}</h2>
+        <div class="font">
+      `
+      let text = fs.readFileSync(`./tab/${title}/data/${list[i]}`, 'utf8');
+      resultList = resultList + `${text}
+        </div>
+        <br>
+      </div>
+      `;
+      i = i + 1;
+    }
   }
   return resultList;
 }
@@ -178,8 +197,16 @@ let app = http.createServer(function(request, response){
       fs.readdir('./tab', function(error, tempMenulist){
         fs.readdir(`./tab/${title}/data`, function(error, tempTextlist){
 
+
           let menulist = getList(tempMenulist, theme);
-          let textlist = getListAndText(title, tempTextlist);
+          let textlist = null;
+          if(fs.existsSync(`./tab/${title}/img`)){
+            tempImglist = fs.readdirSync(`./tab/${title}/img`)
+            textlist = getListAndText(title, tempTextlist, tempImglist);
+          }
+          else{
+            textlist = getListAndText(title, tempTextlist, null);
+          }
 
           template = menuTemplate(menulist, textlist, theme);
 
