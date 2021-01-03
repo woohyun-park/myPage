@@ -33,10 +33,6 @@ function homeTemplateHTML(list, theme){
     }
     </style>
     `;
-    // while(i < menus.length){
-    //   menus[i].style.color = 'black';
-    //   i=i+1;
-    // }
   }
 
   return result + `
@@ -136,7 +132,6 @@ function getListAndText(title, list, imgList){
         <h2>${list[i]}</h2>
         <div class="font">
       `
-      //<img src="./img/sogumm-위로.jpg" alt="sogumm-위로">
       let text = fs.readFileSync(`./tab/${title}/data/${list[i]}`, 'utf8');
       resultList = resultList + `${text}
         </div>
@@ -235,8 +230,5 @@ let app = http.createServer(function(request, response){
     response.writeHead(404);
     response.end('Not Found');
   }
-  // 한글이 포함된 파일이 이상하게 인코딩되어 decodeURI을 사용하였다
-  // response.writeHead(200);
-  // response.end(fs.readFileSync(__dirname + decodeURI(_url)));
 })
 app.listen(3000);
