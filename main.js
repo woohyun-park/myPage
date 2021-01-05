@@ -125,7 +125,7 @@ function createTemplate(list, theme, id){
           <p><input type="text" name="folder" ${id}></p>
           <p><input type="text" name="title" placeholder="title"></p>
           <p>
-            <textarea name="description" placeholder="description"></textarea>
+            <textarea name="description" placeholder="description" cols="100%" rows="30%"></textarea>
           </p>
           <p>
             <input type="submit">
@@ -259,7 +259,7 @@ function getList(list, theme, id){
     resultList = resultList + `<a href="/?id=${list[i]}&theme=${theme}" id="menu-${i+1}" class="menu">${list[i]} </a>`;
     i = i + 1;
   }
-  return resultList + `<a href="/create?theme=${theme}&id=${id}" id="menu-5" class="menu">create </a>`;
+  return resultList + `<a href="/create?theme=${theme}&id=${id}" id="menu-00" class="menu">create </a>`;
 }
 
 function getListAndText(title, list, imgList){
