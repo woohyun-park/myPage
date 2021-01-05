@@ -12,66 +12,66 @@ let formidable = require('formidable');
 //   });
 // }
 
-function createImgTemplate(list, theme){
-  //    <script src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
-  let result = `
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="/style?id=./img/favicon.ico">
-    <link rel="shortcut icon" href="/style?id=./img/favicon.ico">
-    <meta property="og:image" content="/style?id=kakao.png">
-    <meta property="og:title" content="@iamdooddi">
-    <meta property="og:description" content="wachu lookin">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="/style?id=./style.css&type=css">
-    <script type="text/javascript" src="/style?id=./index.js&type=js"></script>
-    <title>@iamdooddi</title>`;
-
-  if(theme == 'wave'){
-    result += `
-    <style>
-    body{
-      background-color: #3b5998;
-      color: #d9d9d9;
-    }
-    .left a{
-      color: #d9d9d9;
-    }
-    </style>
-    `;
-  }
-
-  return result + `
-  </head>
-  <body>
-    <div class="container">
-      <div class="top"></div>
-      <div class="left">
-      ${list}
-      </div>
-      <div class="middle">
-        <form action="/createImg_process" method="post" enctype="multipart/form-data">
-          <input type="text" name="folder" placeholder="folder">
-          <input type="text" name="title" placeholder="title">
-          <input type="file" name="file" accept="image/*">
-          <p>
-            <input type="submit">
-          </p>
-        </form>
-      </div>
-      <div class="right">
-        <a href="/?theme=${theme}"><img id="logo-right" src="/style?id=./img/${theme}/logo-right.png" alt="logo-right"></a>
-      </div>
-    </div>
-    <div class="bottom"></div>
-  </body>
-  </html>
-  `;
-}
+// function createImgTemplate(list, theme){
+//   //    <script src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
+//   let result = `
+//   <!DOCTYPE html>
+//   <html lang="en">
+//   <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+//     <link rel="icon" href="/style?id=./img/favicon.ico">
+//     <link rel="shortcut icon" href="/style?id=./img/favicon.ico">
+//     <meta property="og:image" content="/style?id=kakao.png">
+//     <meta property="og:title" content="@iamdooddi">
+//     <meta property="og:description" content="wachu lookin">
+//     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+//     <link rel="stylesheet" href="/style?id=./style.css&type=css">
+//     <script type="text/javascript" src="/style?id=./index.js&type=js"></script>
+//     <title>@iamdooddi</title>`;
+//
+//   if(theme == 'wave'){
+//     result += `
+//     <style>
+//     body{
+//       background-color: #3b5998;
+//       color: #d9d9d9;
+//     }
+//     .left a{
+//       color: #d9d9d9;
+//     }
+//     </style>
+//     `;
+//   }
+//
+//   return result + `
+//   </head>
+//   <body>
+//     <div class="container">
+//       <div class="top"></div>
+//       <div class="left">
+//       ${list}
+//       </div>
+//       <div class="middle">
+//         <form action="/createImg_process" method="post" enctype="multipart/form-data">
+//           <input type="text" name="folder" placeholder="folder">
+//           <input type="text" name="title" placeholder="title">
+//           <input type="file" name="file" accept="image/*">
+//           <p>
+//             <input type="submit">
+//           </p>
+//         </form>
+//       </div>
+//       <div class="right">
+//         <a href="/?theme=${theme}"><img id="logo-right" src="/style?id=./img/${theme}/logo-right.png" alt="logo-right"></a>
+//       </div>
+//     </div>
+//     <div class="bottom"></div>
+//   </body>
+//   </html>
+//   `;
+// }
 
 function createTemplate(list, theme, id){
   //    <script src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
@@ -121,12 +121,13 @@ function createTemplate(list, theme, id){
       ${list}
       </div>
       <div class="middle">
-        <form action="/create_process" method="post">
+        <form action="/create_process" method="post" enctype="multipart/form-data">
           <p><input type="text" name="folder" ${id}></p>
           <p><input type="text" name="title" placeholder="title"></p>
           <p>
             <textarea name="description" placeholder="description" cols="100%" rows="30%"></textarea>
           </p>
+          <input type="file" name="file" accept="image/*">
           <p>
             <input type="submit">
           </p>
@@ -376,41 +377,41 @@ let app = http.createServer(function(request, response){
       response.end(template);
     })
   }
+  // else if(pathname === '/create_process'){
+  //   let body = '';
+  //   request.on('data', function(data){
+  //     body = body + data;
+  //   });
+  //   request.on('end', function(){
+  //     let post = qs.parse(body);
+  //     console.log(post);
+  //     let folder = post.folder;
+  //     let title = post.title;
+  //     let description = post.description;
+  //     // let form = new formidable.IncomingForm();
+  //     fs.writeFile(`./tab/${folder}/data/${title}`, description, 'utf8', function(err){
+  //       // file.parse(image, function(err, fields, files){
+  //       //   let oldPath = files.file.path;
+  //       //   let newPath = `./tab/${folder}/img/${title}`;
+  //       //   fs.renameSync(oldPath, newPath);
+  //         response.writeHead(302, {'Location': `/createImg?folder=${folder}&title=${title}&theme=${theme}`});
+  //         response.end();
+  //       // })
+  //     });
+  //   });
+  // }
+  // else if(pathname === '/createImg'){
+  //   fs.readdir('./tab', function(error, tempMenulist){
+  //     let menulist = getList(tempMenulist, theme);
+  //
+  //     template = createImgTemplate(menulist, theme);
+  //
+  //     response.writeHead(200);
+  //     response.end(template);
+  //   })
+  // }
   else if(pathname === '/create_process'){
-    let body = '';
-    request.on('data', function(data){
-      body = body + data;
-    });
-    request.on('end', function(){
-      let post = qs.parse(body);
-      console.log(post);
-      let folder = post.folder;
-      let title = post.title;
-      let description = post.description;
-      // let form = new formidable.IncomingForm();
-      fs.writeFile(`./tab/${folder}/data/${title}`, description, 'utf8', function(err){
-        // file.parse(image, function(err, fields, files){
-        //   let oldPath = files.file.path;
-        //   let newPath = `./tab/${folder}/img/${title}`;
-        //   fs.renameSync(oldPath, newPath);
-          response.writeHead(302, {'Location': `/createImg?folder=${folder}&title=${title}&theme=${theme}`});
-          response.end();
-        // })
-      });
-    });
-  }
-  else if(pathname === '/createImg'){
-    fs.readdir('./tab', function(error, tempMenulist){
-      let menulist = getList(tempMenulist, theme);
-
-      template = createImgTemplate(menulist, theme);
-
-      response.writeHead(200);
-      response.end(template);
-    })
-  }
-  else if(pathname === '/createImg_process'){
-    let body = '';
+    // let body = '';
     // let folder = '';
     // let title = '';
     // request.on('data', function(data){
@@ -425,14 +426,19 @@ let app = http.createServer(function(request, response){
     form.parse(request, function(err, fields, files){
       let folder = fields.folder;
       let title = fields.title;
+      let description = fields.description;
       let oldpath = files.file.path;
       let imgType = files.file.type.split('/')[1];
       let newpath = `./tab/${folder}/img/${title}.${imgType}`;
       // console.log(oldpath);
       // console.log(newpath);
       fs.rename(oldpath, newpath, function(err){
-          response.writeHead(302, {'Location': '/'});
+        fs.writeFile(`./tab/${folder}/data/${title}`, description, 'utf8', function(err){
+          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
+        });
+          // response.writeHead(302, {'Location': '/'});
+          // response.end();
       });
     });
   }
