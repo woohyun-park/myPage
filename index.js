@@ -6,6 +6,7 @@ function theme(){
       menus[i].style.color = 'black';
       i=i+1;
     }
+
     $('body').style.background='#d9d9d9';
     $("#title").setAttribute("src", "/style?id=./img/normal/title.png");
     $("#contact").setAttribute("src", "/style?id=./img/normal/contact.png");
@@ -30,6 +31,7 @@ function theme(){
       menus[i].style.color = '#d9d9d9';
       i=i+1;
     }
+
     $('body').style.background='#3b5998';
     $("#title").setAttribute("src", "/style?id=./img/wave/title.png");
     $("#contact").setAttribute("src", "/style?id=./img/wave/contact.png");
