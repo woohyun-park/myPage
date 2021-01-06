@@ -225,6 +225,38 @@ function menuTemplate(menulist, textlist, theme, id){
       </style>
       `;
     }
+    if(id == 'insight'){
+      return result + `
+      </head>
+      <body>
+        <div class="container">
+          <div class="top">
+          </div>
+          <div class="left">
+          ${menulist}
+          <a href="/create?theme=${theme}&id=${id}" id="menu-create" class="menu">create</a>
+          <form action="/update?theme=${theme}&id=${id}" method="post">
+            <input type="submit" style="display:block;" value="update">
+            <input type="text" name="title" style="width:50%;display:block;">
+          </form>
+          <form action="/delete_process?theme=${theme}&id=${id}" method="post">
+            <input type="submit" style="display:block;" value="delete">
+            <input type="text" name="title" style="width:50%;display:block;">
+          </form>
+          </div>
+          <div class="middle">
+            <div class="two">
+            ${textlist}
+            </div>
+          </div>
+          <div class="right">
+            <a href="?theme=${theme}"><img id="logo-right" src="/style?id=./img/${theme}/logo-right.png" alt="logo-right"></a>
+          </div>
+        </div>
+      </body>
+      </html>
+      `;
+    }
   return result + `
   </head>
   <body>
