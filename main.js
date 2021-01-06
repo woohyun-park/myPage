@@ -4,6 +4,7 @@ let url = require('url');
 let qs = require('querystring');
 let formidable = require('formidable');
 let template = require('./lib/template.js');
+let path = require('path');
 
 function getList(list, theme, id){
   let resultList = `<a href='/?theme=${theme}' id="menu-0" class="menu">home</a>`;
@@ -25,7 +26,9 @@ function getListAndText(title, list, imgList){
         <h2>${list[i]}</h2>
         <div class="font">
       `
-      let text = fs.readFileSync(`./tab/${title}/data/${list[i]}`, 'utf8');
+      let filteredTitle = path.parse(title).base;
+      let filteredList = path.parse(list[i]).base;
+      let text = fs.readFileSync(`./tab/${filteredTitle}/data/${filteredList}`, 'utf8');
       resultList = resultList + `${text}
         </div>
         <br>
@@ -42,6 +45,8 @@ function getListAndText(title, list, imgList){
         <h2>${list[i]}</h2>
         <div class="font">
       `
+      let filteredTitle = path.parse(title).base;
+      let filteredList = path.parse(list[i]).base;
       let text = fs.readFileSync(`./tab/${title}/data/${list[i]}`, 'utf8');
       resultList = resultList + `${text}
         </div>
@@ -83,13 +88,14 @@ let app = http.createServer(function(request, response){
     //home이 아닐때
     else{
       fs.readdir('./tab', function(error, tempMenulist){
-        fs.readdir(`./tab/${title}/data`, function(error, tempTextlist){
+        let filteredTitle = path.parse(title).base;
+        fs.readdir(`./tab/${filteredTitle}/data`, function(error, tempTextlist){
 
 
           let menulist = getList(tempMenulist, theme, title);
           let textlist = null;
-          if(fs.existsSync(`./tab/${title}/img`)){
-            tempImglist = fs.readdirSync(`./tab/${title}/img`)
+          if(fs.existsSync(`./tab/${filteredTitle}/img`)){
+            tempImglist = fs.readdirSync(`./tab/${filteredTitle}/img`)
             textlist = getListAndText(title, tempTextlist, tempImglist);
           }
           else{
@@ -139,6 +145,8 @@ let app = http.createServer(function(request, response){
       let imgType = files.file.type.split('/')[1];
       let newpath = `./tab/${folder}/img/${title}.${imgType}`;
       fs.rename(oldpath, newpath, function(err){
+        let filteredFolder = path.parse(folder).base;
+        let filteredTitle = path.parse(title).base;
         fs.writeFile(`./tab/${folder}/data/${title}`, description, 'utf8', function(err){
           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
@@ -156,6 +164,8 @@ let app = http.createServer(function(request, response){
         let post = qs.parse(body);
         let textTitle = post.title;
         let menulist = getList(tempMenulist, theme);
+        let filteredTitle = path.parse(title).base;
+        let filteredTextTitle = path.parse(textTitle).base;
         fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(error, text){
           html = template.update(menulist, theme, title, textTitle, text);
           response.writeHead(200);
@@ -180,6 +190,7 @@ let app = http.createServer(function(request, response){
       fs.rename(oldpathText, newpathText, function(err){
         fs.writeFile(newpathText, description, 'utf8', function(err){
           fs.rename(oldpathImg, newpathImg, function(err){
+            let filteredFolder = path.parse(folder).base;
             response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
             response.end();
           })
@@ -196,6 +207,8 @@ let app = http.createServer(function(request, response){
       let post = qs.parse(body);
       let title = post.title;
       let folder = queryData.id;
+      let filteredFolder = path.parse(folder).base;
+      let filteredTitle = path.parse(title).base;
       fs.unlink(`./tab/${folder}/data/${title}`, function(error){
         fs.unlink(`./tab/${folder}/img/${title}.png`, function(error){
           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
