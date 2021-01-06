@@ -5,6 +5,7 @@ let qs = require('querystring');
 let formidable = require('formidable');
 let template = require('./lib/template.js');
 let path = require('path');
+let sanitizeHtml = require('sanitize-html');
 
 function getList(list, theme, id){
   let resultList = `<a href='/?theme=${theme}' id="menu-0" class="menu">home</a>`;
@@ -21,19 +22,17 @@ function getListAndText(title, list, imgList){
   let i = 0;
   if(imgList == null){
     while(i < list.length){
+      let sanitizeTitle = sanitizeHtml(list[i]);
       resultList = resultList + `
       <div class="imgBlock">
-        <h2>${list[i]}</h2>
-        <div class="font">
-      `
-      let filteredTitle = path.parse(title).base;
-      let filteredList = path.parse(list[i]).base;
-      let text = fs.readFileSync(`./tab/${filteredTitle}/data/${filteredList}`, 'utf8');
-      resultList = resultList + `${text}
+        <h2>${sanitizeTitle}</h2>
+        <div class="font">`;
+      let text = fs.readFileSync(`./tab/${title}/data/${sanitizeTitle}`, 'utf8');
+      let sanitizeText = sanitizeHtml(text);
+      resultList = resultList + `${sanitizeText}
         </div>
         <br>
-      </div>
-      `;
+      </div>`;
       i = i + 1;
     }
   }
@@ -43,23 +42,17 @@ function getListAndText(title, list, imgList){
       <div class="imgBlock">
         <img src="/style?id=./tab/${title}/img/${imgList[i]}" alt="${imgList[i]}">
         <h2>${list[i]}</h2>
-        <div class="font">
-      `
-      let filteredTitle = path.parse(title).base;
-      let filteredList = path.parse(list[i]).base;
+        <div class="font">`;
       let text = fs.readFileSync(`./tab/${title}/data/${list[i]}`, 'utf8');
       resultList = resultList + `${text}
         </div>
         <br>
-      </div>
-      `;
+      </div>`;
       i = i + 1;
     }
   }
   return resultList;
 }
-
-
 
 let app = http.createServer(function(request, response){
   let _url = request.url;
@@ -76,11 +69,8 @@ let app = http.createServer(function(request, response){
     //home일때
     if(queryData.id === undefined){
       fs.readdir('./tab', function(error, filelist){
-
         let list = getList(filelist, theme);
-
         html = template.home(list, theme);
-
         response.writeHead(200);
         response.end(html);
       })
@@ -90,20 +80,16 @@ let app = http.createServer(function(request, response){
       fs.readdir('./tab', function(error, tempMenulist){
         let filteredTitle = path.parse(title).base;
         fs.readdir(`./tab/${filteredTitle}/data`, function(error, tempTextlist){
-
-
           let menulist = getList(tempMenulist, theme, title);
           let textlist = null;
-          if(fs.existsSync(`./tab/${filteredTitle}/img`)){
-            tempImglist = fs.readdirSync(`./tab/${filteredTitle}/img`)
+          if(fs.existsSync(`./tab/${title}/img`)){
+            tempImglist = fs.readdirSync(`./tab/${title}/img`)
             textlist = getListAndText(title, tempTextlist, tempImglist);
           }
           else{
             textlist = getListAndText(title, tempTextlist, null);
           }
-
           html = template.menu(menulist, textlist, theme, title);
-
           response.writeHead(200);
           response.end(html);
         })
@@ -128,9 +114,7 @@ let app = http.createServer(function(request, response){
   else if(pathname === '/create'){
     fs.readdir('./tab', function(error, tempMenulist){
       let menulist = getList(tempMenulist, theme);
-
       html = template.create(menulist, theme, title);
-
       response.writeHead(200);
       response.end(html);
     })
@@ -141,13 +125,12 @@ let app = http.createServer(function(request, response){
       let folder = fields.folder;
       let title = fields.title;
       let description = fields.description;
+      let filteredTitle = path.parse(title).base;
       let oldpath = files.file.path;
       let imgType = files.file.type.split('/')[1];
-      let newpath = `./tab/${folder}/img/${title}.${imgType}`;
+      let newpath = `./tab/${folder}/img/${filteredTitle}.${imgType}`;
       fs.rename(oldpath, newpath, function(err){
-        let filteredFolder = path.parse(folder).base;
-        let filteredTitle = path.parse(title).base;
-        fs.writeFile(`./tab/${folder}/data/${title}`, description, 'utf8', function(err){
+        fs.writeFile(`./tab/${folder}/data/${filteredTitle}`, description, 'utf8', function(err){
           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
         });
@@ -164,8 +147,6 @@ let app = http.createServer(function(request, response){
         let post = qs.parse(body);
         let textTitle = post.title;
         let menulist = getList(tempMenulist, theme);
-        let filteredTitle = path.parse(title).base;
-        let filteredTextTitle = path.parse(textTitle).base;
         fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(error, text){
           html = template.update(menulist, theme, title, textTitle, text);
           response.writeHead(200);
@@ -181,16 +162,15 @@ let app = http.createServer(function(request, response){
       let folder = fields.folder;
       let title = fields.title;
       let description = fields.description;
-
-      let oldpathText = `./tab/${folder}/data/${fileName}`;
-      let newpathText = `./tab/${folder}/data/${title}`;
-      let oldpathImg = `./tab/${folder}/img/${fileName}.png`;
-      let newpathImg = `./tab/${folder}/img/${title}.png`;
-
+      let filteredFolder = path.parse(folder).base;
+      let filteredTitle = path.parse(title).base;
+      let oldpathText = `./tab/${filteredFolder}/data/${fileName}`;
+      let newpathText = `./tab/${filteredFolder}/data/${filteredTitle}`;
+      let oldpathImg = `./tab/${filteredFolder}/img/${fileName}.png`;
+      let newpathImg = `./tab/${filteredFolder}/img/${filteredTitle}.png`;
       fs.rename(oldpathText, newpathText, function(err){
         fs.writeFile(newpathText, description, 'utf8', function(err){
           fs.rename(oldpathImg, newpathImg, function(err){
-            let filteredFolder = path.parse(folder).base;
             response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
             response.end();
           })
@@ -209,8 +189,8 @@ let app = http.createServer(function(request, response){
       let folder = queryData.id;
       let filteredFolder = path.parse(folder).base;
       let filteredTitle = path.parse(title).base;
-      fs.unlink(`./tab/${folder}/data/${title}`, function(error){
-        fs.unlink(`./tab/${folder}/img/${title}.png`, function(error){
+      fs.unlink(`./tab/${filteredFolder}/data/${filteredTitle}`, function(error){
+        fs.unlink(`./tab/${filteredFolder}/img/${filteredTitle}.png`, function(error){
           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
         });
