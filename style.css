@@ -5,8 +5,29 @@
   border: 1px solid red;
 } */
 
-#menu-00{
-  margin-top: 10px;
+input[type=text]{
+  border:none;
+}
+
+input[type=submit]{
+  background: none;
+  border: none;
+  font-family: 'Roboto', 'Nanum Gothic', sans-serif;
+  font-size: 15px;
+  padding: 0;
+  margin-bottom: 5px;
+}
+
+textarea{
+  border:none;
+}
+
+input[type=submit]:hover{
+  font-weight: 700;
+}
+
+#menu-create{
+  margin-top: 20px;
 }
 
 .three{

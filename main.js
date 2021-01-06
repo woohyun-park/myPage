@@ -4,82 +4,13 @@ let url = require('url');
 let qs = require('querystring');
 let formidable = require('formidable');
 
-// function saveImageToDisk(url, localPath) {
-//   var fullUrl = url;
-//   var file = fs.createWriteStream(localPath);
-//   var request = http.get(url, function(response) {
-//     response.pipe(file);
-//   });
-// }
-
-// function createImgTemplate(list, theme){
-//   //    <script src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
-//   let result = `
-//   <!DOCTYPE html>
-//   <html lang="en">
-//   <head>
-//     <meta charset="UTF-8">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-//     <link rel="icon" href="/style?id=./img/favicon.ico">
-//     <link rel="shortcut icon" href="/style?id=./img/favicon.ico">
-//     <meta property="og:image" content="/style?id=kakao.png">
-//     <meta property="og:title" content="@iamdooddi">
-//     <meta property="og:description" content="wachu lookin">
-//     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-//     <link rel="stylesheet" href="/style?id=./style.css&type=css">
-//     <script type="text/javascript" src="/style?id=./index.js&type=js"></script>
-//     <title>@iamdooddi</title>`;
-//
-//   if(theme == 'wave'){
-//     result += `
-//     <style>
-//     body{
-//       background-color: #3b5998;
-//       color: #d9d9d9;
-//     }
-//     .left a{
-//       color: #d9d9d9;
-//     }
-//     </style>
-//     `;
-//   }
-//
-//   return result + `
-//   </head>
-//   <body>
-//     <div class="container">
-//       <div class="top"></div>
-//       <div class="left">
-//       ${list}
-//       </div>
-//       <div class="middle">
-//         <form action="/createImg_process" method="post" enctype="multipart/form-data">
-//           <input type="text" name="folder" placeholder="folder">
-//           <input type="text" name="title" placeholder="title">
-//           <input type="file" name="file" accept="image/*">
-//           <p>
-//             <input type="submit">
-//           </p>
-//         </form>
-//       </div>
-//       <div class="right">
-//         <a href="/?theme=${theme}"><img id="logo-right" src="/style?id=./img/${theme}/logo-right.png" alt="logo-right"></a>
-//       </div>
-//     </div>
-//     <div class="bottom"></div>
-//   </body>
-//   </html>
-//   `;
-// }
-
-function createTemplate(list, theme, id){
-  //    <script src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
-  if(id == 'undefined'){
-    id = 'placeholder=folder';
+function updateTemplate(list, theme, id, title, description){
+  console.log('description is:' + description);
+  if(title == 'undefined'){
+    title = 'title';
   }
-  else{
-    id = `value=${id}`;
+  if(description == 'undefined'){
+    description = 'description';
   }
   let result = `
   <!DOCTYPE html>
@@ -121,13 +52,78 @@ function createTemplate(list, theme, id){
       ${list}
       </div>
       <div class="middle">
-        <form action="/create_process" method="post" enctype="multipart/form-data">
-          <p><input type="text" name="folder" ${id}></p>
-          <p><input type="text" name="title" placeholder="title"></p>
+        <h2>${id}</h2>
+        <form action="/update_process" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="fileName" value="${title}">
+          <p><input type="hidden" name="folder" value="${id}"></p>
+          <p><input type="text" name="title" placeholder="title" value="${title}" style="width:100%;display:block;margin-left:auto;margin-right:auto;"></p>
           <p>
-            <textarea name="description" placeholder="description" cols="100%" rows="30%"></textarea>
+            <textarea name="description" placeholder="description" style="width:100%;height:500px;display:block;margin-left:auto;margin-right:auto;">${description}</textarea>
           </p>
-          <input type="file" name="file" accept="image/*">
+          <p>
+            <input type="submit" value="submit">
+          </p>
+        </form>
+      </div>
+      <div class="right">
+        <a href="/?theme=${theme}"><img id="logo-right" src="/style?id=./img/${theme}/logo-right.png" alt="logo-right"></a>
+      </div>
+    </div>
+    <div class="bottom"></div>
+  </body>
+  </html>
+  `;
+}
+
+function createTemplate(list, theme, id){
+  let result = `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/style?id=./img/favicon.ico">
+    <link rel="shortcut icon" href="/style?id=./img/favicon.ico">
+    <meta property="og:image" content="/style?id=kakao.png">
+    <meta property="og:title" content="@iamdooddi">
+    <meta property="og:description" content="wachu lookin">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style?id=./style.css&type=css">
+    <script type="text/javascript" src="/style?id=./index.js&type=js"></script>
+    <title>@iamdooddi</title>`;
+
+  if(theme == 'wave'){
+    result += `
+    <style>
+    body{
+      background-color: #3b5998;
+      color: #d9d9d9;
+    }
+    .left a{
+      color: #d9d9d9;
+    }
+    </style>
+    `;
+  }
+
+  return result + `
+  </head>
+  <body>
+    <div class="container">
+      <div class="top"></div>
+      <div class="left">
+      ${list}
+      </div>
+      <div class="middle">
+        <h2>${id}</h2>
+        <form action="/create_process" method="post" enctype="multipart/form-data">
+          <p><input type="hidden" name="folder" value="${id}"></p>
+          <p><input type="text" name="title" placeholder="title" style="width:100%;display:block;margin-left:auto;margin-right:auto;"></p>
+          <p>
+            <textarea name="description" placeholder="description" style="width:100%;height:500px;display:block;margin-left:auto;margin-right:auto;"></textarea>
+          </p>
+          <p><input type="file" name="file" accept="image/*"></p>
           <p>
             <input type="submit">
           </p>
@@ -144,7 +140,6 @@ function createTemplate(list, theme, id){
 }
 
 function homeTemplate(list, theme){
-  //    <script src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
   let result = `
   <!DOCTYPE html>
   <html lang="en">
@@ -203,7 +198,7 @@ function homeTemplate(list, theme){
   `;
 }
 
-function menuTemplate(menulist, textlist, theme){
+function menuTemplate(menulist, textlist, theme, id){
   let result =  `
   <!DOCTYPE html>
   <html lang="en">
@@ -238,6 +233,15 @@ function menuTemplate(menulist, textlist, theme){
       </div>
       <div class="left">
       ${menulist}
+      <a href="/create?theme=${theme}&id=${id}" id="menu-create" class="menu">create</a>
+      <form action="/update?theme=${theme}&id=${id}" method="post">
+        <input type="submit" style="display:block;" value="update">
+        <input type="text" name="title" style="width:50%;display:block;">
+      </form>
+      <form action="/delete_process?theme=${theme}&id=${id}" method="post">
+        <input type="submit" style="display:block;" value="delete">
+        <input type="text" name="title" style="width:50%;display:block;">
+      </form>
       </div>
       <div class="middle">
         <div class="three">
@@ -260,7 +264,7 @@ function getList(list, theme, id){
     resultList = resultList + `<a href="/?id=${list[i]}&theme=${theme}" id="menu-${i+1}" class="menu">${list[i]} </a>`;
     i = i + 1;
   }
-  return resultList + `<a href="/create?theme=${theme}&id=${id}" id="menu-00" class="menu">create </a>`;
+  return resultList;
 }
 
 function getListAndText(title, list, imgList){
@@ -344,7 +348,7 @@ let app = http.createServer(function(request, response){
             textlist = getListAndText(title, tempTextlist, null);
           }
 
-          template = menuTemplate(menulist, textlist, theme);
+          template = menuTemplate(menulist, textlist, theme, title);
 
           response.writeHead(200);
           response.end(template);
@@ -377,52 +381,8 @@ let app = http.createServer(function(request, response){
       response.end(template);
     })
   }
-  // else if(pathname === '/create_process'){
-  //   let body = '';
-  //   request.on('data', function(data){
-  //     body = body + data;
-  //   });
-  //   request.on('end', function(){
-  //     let post = qs.parse(body);
-  //     console.log(post);
-  //     let folder = post.folder;
-  //     let title = post.title;
-  //     let description = post.description;
-  //     // let form = new formidable.IncomingForm();
-  //     fs.writeFile(`./tab/${folder}/data/${title}`, description, 'utf8', function(err){
-  //       // file.parse(image, function(err, fields, files){
-  //       //   let oldPath = files.file.path;
-  //       //   let newPath = `./tab/${folder}/img/${title}`;
-  //       //   fs.renameSync(oldPath, newPath);
-  //         response.writeHead(302, {'Location': `/createImg?folder=${folder}&title=${title}&theme=${theme}`});
-  //         response.end();
-  //       // })
-  //     });
-  //   });
-  // }
-  // else if(pathname === '/createImg'){
-  //   fs.readdir('./tab', function(error, tempMenulist){
-  //     let menulist = getList(tempMenulist, theme);
-  //
-  //     template = createImgTemplate(menulist, theme);
-  //
-  //     response.writeHead(200);
-  //     response.end(template);
-  //   })
-  // }
   else if(pathname === '/create_process'){
-    // let body = '';
-    // let folder = '';
-    // let title = '';
-    // request.on('data', function(data){
-    //   body = body + data;
-    // })
-    // request.on('end', function(){
-    //   let post = qs.parse(body, 'name="', '"\r\n\r\n');
-    //   folder = post.folder.split('\r\n')[0];
-    //   title = post.title.split('\r\n')[0];
-    // })
-    let form = new formidable.IncomingForm(); //객체 할당
+    let form = new formidable.IncomingForm();
     form.parse(request, function(err, fields, files){
       let folder = fields.folder;
       let title = fields.title;
@@ -430,17 +390,74 @@ let app = http.createServer(function(request, response){
       let oldpath = files.file.path;
       let imgType = files.file.type.split('/')[1];
       let newpath = `./tab/${folder}/img/${title}.${imgType}`;
-      // console.log(oldpath);
-      // console.log(newpath);
       fs.rename(oldpath, newpath, function(err){
         fs.writeFile(`./tab/${folder}/data/${title}`, description, 'utf8', function(err){
           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
         });
-          // response.writeHead(302, {'Location': '/'});
-          // response.end();
       });
     });
+  }
+  else if(pathname === '/update'){
+    fs.readdir('./tab', function(error, tempMenulist){
+      let body = '';
+      request.on('data', function(data){
+          body = body + data;
+      });
+      request.on('end', function(){
+        let post = qs.parse(body);
+        let textTitle = post.title;
+        let menulist = getList(tempMenulist, theme);
+        fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(error, text){
+          template = updateTemplate(menulist, theme, title, textTitle, text);
+          response.writeHead(200);
+          response.end(template);
+        });
+      });
+    })
+  }
+  else if(pathname === '/update_process'){
+    let form = new formidable.IncomingForm();
+    form.parse(request, function(err, fields, files){
+      let fileName = fields.fileName;
+      let folder = fields.folder;
+      let title = fields.title;
+      let description = fields.description;
+
+      let oldpathText = `./tab/${folder}/data/${fileName}`;
+      let newpathText = `./tab/${folder}/data/${title}`;
+      let oldpathImg = `./tab/${folder}/img/${fileName}.png`;
+      let newpathImg = `./tab/${folder}/img/${title}.png`;
+
+      console.log(oldpathImg);
+      console.log(newpathImg);
+
+      fs.rename(oldpathText, newpathText, function(err){
+        fs.writeFile(newpathText, description, 'utf8', function(err){
+          fs.rename(oldpathImg, newpathImg, function(err){
+            response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+            response.end();
+          })
+        });
+      });
+    });
+  }
+  else if(pathname === '/delete_process'){
+    let body = '';
+    request.on('data', function(data){
+      body = body + data;
+    })
+    request.on('end', function(){
+      let post = qs.parse(body);
+      let title = post.title;
+      let folder = queryData.id;
+      fs.unlink(`./tab/${folder}/data/${title}`, function(error){
+        fs.unlink(`./tab/${folder}/img/${title}.png`, function(error){
+          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+          response.end();
+        });
+      })
+    })
   }
   else{
     response.writeHead(404);

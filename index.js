@@ -16,10 +16,11 @@ function theme(){
     $("#theme").setAttribute("value", "normal");
 
     $("#menu-0").setAttribute("href", "/");
-    $("#menu-1").setAttribute("href", "?id=diary");
-    $("#menu-2").setAttribute("href", "?id=note");
-    $("#menu-3").setAttribute("href", "?id=music");
-    $("#menu-4").setAttribute("href", "?id=design");
+    $("#menu-1").setAttribute("href", "?id=design");
+    $("#menu-2").setAttribute("href", "?id=diary");
+    $("#menu-3").setAttribute("href", "?id=insight");
+    $("#menu-4").setAttribute("href", "?id=music");
+    $("#menu-5").setAttribute("href", "?id=note");
     $("#title-link").setAttribute("href", "/");
   }
   else{
@@ -39,10 +40,11 @@ function theme(){
     $("#theme").setAttribute("value", "wave");
 
     $("#menu-0").setAttribute("href", "/?theme=wave");
-    $("#menu-1").setAttribute("href", "?id=diary&theme=wave");
-    $("#menu-2").setAttribute("href", "?id=note&theme=wave");
-    $("#menu-3").setAttribute("href", "?id=music&theme=wave");
-    $("#menu-4").setAttribute("href", "?id=design&theme=wave");
+    $("#menu-1").setAttribute("href", "?id=design&theme=wave");
+    $("#menu-2").setAttribute("href", "?id=diary&theme=wave");
+    $("#menu-3").setAttribute("href", "?id=insight&theme=wave");
+    $("#menu-4").setAttribute("href", "?id=music&theme=wave");
+    $("#menu-5").setAttribute("href", "?id=note&theme=wave");
     $("#title-link").setAttribute("href", "/?theme=wave");
   }
 }
