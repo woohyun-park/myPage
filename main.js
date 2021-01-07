@@ -120,83 +120,98 @@ let app = http.createServer(function(request, response){
     })
   }
   else if(pathname === '/create_process'){
-    let form = new formidable.IncomingForm();
-    form.parse(request, function(err, fields, files){
-      let folder = fields.folder;
-      let title = fields.title;
-      let description = fields.description;
-      let filteredTitle = path.parse(title).base;
-      let oldpath = files.file.path;
-      let imgType = files.file.type.split('/')[1];
-      let newpath = `./tab/${folder}/img/${filteredTitle}.${imgType}`;
-      fs.rename(oldpath, newpath, function(err){
-        fs.writeFile(`./tab/${folder}/data/${filteredTitle}`, description, 'utf8', function(err){
-          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
-          response.end();
-        });
-      });
-    });
-  }
-  else if(pathname === '/update'){
-    fs.readdir('./tab', function(error, tempMenulist){
-      let body = '';
-      request.on('data', function(data){
-          body = body + data;
-      });
-      request.on('end', function(){
-        let post = qs.parse(body);
-        let textTitle = post.title;
-        let menulist = getList(tempMenulist, theme);
-        fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(error, text){
-          html = template.update(menulist, theme, title, textTitle, text);
-          response.writeHead(200);
-          response.end(html);
-        });
-      });
-    })
-  }
-  else if(pathname === '/update_process'){
-    let form = new formidable.IncomingForm();
-    form.parse(request, function(err, fields, files){
-      let fileName = fields.fileName;
-      let folder = fields.folder;
-      let title = fields.title;
-      let description = fields.description;
-      let filteredFolder = path.parse(folder).base;
-      let filteredTitle = path.parse(title).base;
-      let oldpathText = `./tab/${filteredFolder}/data/${fileName}`;
-      let newpathText = `./tab/${filteredFolder}/data/${filteredTitle}`;
-      let oldpathImg = `./tab/${filteredFolder}/img/${fileName}.png`;
-      let newpathImg = `./tab/${filteredFolder}/img/${filteredTitle}.png`;
-      fs.rename(oldpathText, newpathText, function(err){
-        fs.writeFile(newpathText, description, 'utf8', function(err){
-          fs.rename(oldpathImg, newpathImg, function(err){
-            response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
-            response.end();
-          })
-        });
-      });
-    });
-  }
-  else if(pathname === '/delete_process'){
     let body = '';
     request.on('data', function(data){
       body = body + data;
-    })
+    });
     request.on('end', function(){
       let post = qs.parse(body);
+      let folder = post.folder;
       let title = post.title;
-      let folder = queryData.id;
-      let filteredFolder = path.parse(folder).base;
-      let filteredTitle = path.parse(title).base;
-      fs.unlink(`./tab/${filteredFolder}/data/${filteredTitle}`, function(error){
-        fs.unlink(`./tab/${filteredFolder}/img/${filteredTitle}.png`, function(error){
-          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
-          response.end();
-        });
-      })
-    })
+      let description = post.description;
+      fs.writeFile(`./tab/${folder}/data/${title}`, description, 'utf8', function(err){
+        response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+        response.end();
+      });
+    });
+    //
+    // let form = new formidable.IncomingForm();
+    // form.parse(request, function(err, fields, files){
+    //   let folder = fields.folder;
+    //   let title = fields.title;
+    //   let description = fields.description;
+    //   let filteredTitle = path.parse(title).base;
+    //   let oldpath = files.file.path;
+    //   let imgType = files.file.type.split('/')[1];
+    //   let newpath = `./tab/${folder}/img/${filteredTitle}.${imgType}`;
+    //   fs.rename(oldpath, newpath, function(err){
+    //     fs.writeFile(`./tab/${folder}/data/${filteredTitle}`, description, 'utf8', function(err){
+    //       response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+    //       response.end();
+    //     });
+    //   });
+    // });
   }
+  // else if(pathname === '/update'){
+  //   fs.readdir('./tab', function(error, tempMenulist){
+  //     let body = '';
+  //     request.on('data', function(data){
+  //         body = body + data;
+  //     });
+  //     request.on('end', function(){
+  //       let post = qs.parse(body);
+  //       let textTitle = post.title;
+  //       let menulist = getList(tempMenulist, theme);
+  //       fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(error, text){
+  //         html = template.update(menulist, theme, title, textTitle, text);
+  //         response.writeHead(200);
+  //         response.end(html);
+  //       });
+  //     });
+  //   })
+  // }
+  // else if(pathname === '/update_process'){
+  //   let form = new formidable.IncomingForm();
+  //   form.parse(request, function(err, fields, files){
+  //     let fileName = fields.fileName;
+  //     let folder = fields.folder;
+  //     let title = fields.title;
+  //     let description = fields.description;
+  //     let filteredFolder = path.parse(folder).base;
+  //     let filteredTitle = path.parse(title).base;
+  //     let oldpathText = `./tab/${filteredFolder}/data/${fileName}`;
+  //     let newpathText = `./tab/${filteredFolder}/data/${filteredTitle}`;
+  //     let oldpathImg = `./tab/${filteredFolder}/img/${fileName}.png`;
+  //     let newpathImg = `./tab/${filteredFolder}/img/${filteredTitle}.png`;
+  //     fs.rename(oldpathText, newpathText, function(err){
+  //       fs.writeFile(newpathText, description, 'utf8', function(err){
+  //         fs.rename(oldpathImg, newpathImg, function(err){
+  //           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+  //           response.end();
+  //         })
+  //       });
+  //     });
+  //   });
+  // }
+  // else if(pathname === '/delete_process'){
+  //   let body = '';
+  //   request.on('data', function(data){
+  //     body = body + data;
+  //   })
+  //   request.on('end', function(){
+  //     let post = qs.parse(body);
+  //     let title = post.title;
+  //     let folder = queryData.id;
+  //     let filteredFolder = path.parse(folder).base;
+  //     let filteredTitle = path.parse(title).base;
+  //     fs.unlink(`./tab/${filteredFolder}/data/${filteredTitle}`, function(error){
+  //       fs.unlink(`./tab/${filteredFolder}/img/${filteredTitle}.png`, function(error){
+  //         response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+  //         response.end();
+  //       });
+  //     })
+  //   })
+  // }
   else{
     response.writeHead(404);
     response.end('Not Found');
