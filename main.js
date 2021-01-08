@@ -23,17 +23,31 @@ function getListAndText(title, list, imgList){
   if(imgList == null){
     while(i < list.length){
       let sanitizeTitle = sanitizeHtml(list[i]);
-      resultList = resultList + `
-      <div class="imgBlock">
-        <h2>${sanitizeTitle}</h2>
-        <div class="font">`;
-      let text = fs.readFileSync(`./tab/${title}/data/${sanitizeTitle}`, 'utf8');
-      let sanitizeText = sanitizeHtml(text);
-      resultList = resultList + `${sanitizeText}
-        </div>
-        <br>
-      </div>`;
-      i = i + 1;
+      if(title == 'guest'){
+        resultList = resultList + `
+        <div class="imgBlock">
+          <h4>${sanitizeTitle}</h4>
+          <div class="font">`;
+        let text = fs.readFileSync(`./tab/${title}/data/${sanitizeTitle}`, 'utf8');
+        resultList = resultList + `${text}
+          </div>
+          <br>
+        </div>`;
+        i = i + 1;
+      }
+      else{
+        resultList = resultList + `
+        <div class="imgBlock">
+          <h2>${sanitizeTitle}</h2>
+          <div class="font">`;
+        let text = fs.readFileSync(`./tab/${title}/data/${sanitizeTitle}`, 'utf8');
+        let sanitizeText = sanitizeHtml(text);
+        resultList = resultList + `${sanitizeText}
+          </div>
+          <br>
+        </div>`;
+        i = i + 1;
+      }
     }
   }
   else{
