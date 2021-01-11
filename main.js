@@ -50,7 +50,7 @@ function getListAndText(title, list, imgList){
         <div class="imgBlock">
           <h2>${sanitizeTitle}</h2>
           <div class="font">`;
-        let text = fs.readFileSync(`./tab/${title}/data/${sanitizeTitle}`, 'utf8');
+        let text = list[i].description;
         let sanitizeText = sanitizeHtml(text);
         resultList = resultList + `${sanitizeText}
           </div>
@@ -88,7 +88,6 @@ let app = http.createServer(function(request, response){
   if(theme == undefined){
     theme = 'normal';
   }
-
   if(pathname === '/'){
     //home일때
     if(queryData.id === undefined){
@@ -125,7 +124,8 @@ let app = http.createServer(function(request, response){
       //   })
       // })
       db.query('select * from list', function (error, tempMenulist, fields){
-        db.query('select * from guest', function (error, tempTextlist, fields){
+        db.query(`select * from ${title}`, function (error, tempTextlist, fields){
+          console.log('1');
           let menulist = getList(tempMenulist, theme);
           let textlist = getListAndText(title, tempTextlist, null);
           html = template.menu(menulist, textlist, theme, title);
