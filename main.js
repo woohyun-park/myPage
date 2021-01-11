@@ -6,12 +6,20 @@ let formidable = require('formidable');
 let template = require('./lib/template.js');
 let path = require('path');
 let sanitizeHtml = require('sanitize-html');
+let mysql = require('mysql');
+let db = mysql.createConnection({
+  host    : 'localhost',
+  user    : 'root',
+  password: 'zxcvZXCV',
+  database: 'myPage'
+});
+db.connect();
 
-function getList(list, theme, id){
+function getList(list, theme){
   let resultList = `<a href='/?theme=${theme}' id="menu-0" class="menu">home</a>`;
   let i = 0;
   while(i < list.length){
-    resultList = resultList + `<a href="/?id=${list[i]}&theme=${theme}" id="menu-${i+1}" class="menu">${list[i]} </a>`;
+    resultList = resultList + `<a href="/?id=${list[i].title}&theme=${theme}" id="menu-${i+1}" class="menu">${list[i].title} </a>`;
     i = i + 1;
   }
   return resultList;
@@ -22,15 +30,17 @@ function getListAndText(title, list, imgList){
   let i = 0;
   if(imgList == null){
     while(i < list.length){
-      let sanitizeTitle = sanitizeHtml(list[i]);
+      let sanitizeTitle = sanitizeHtml(list[i].title);
       if(title == 'guest'){
         resultList = resultList + `
         <div class="imgBlock">
           <h4>${sanitizeTitle}</h4>
           <div class="font">`;
-        let text = fs.readFileSync(`./tab/${title}/data/${sanitizeTitle}`, 'utf8');
+        let text = list[i].description;
+        let author = list[i].author;
         resultList = resultList + `${text}
           </div>
+          <div style="text-align: right;">-${author}</div>
           <br>
         </div>`;
         i = i + 1;
@@ -82,32 +92,47 @@ let app = http.createServer(function(request, response){
   if(pathname === '/'){
     //home일때
     if(queryData.id === undefined){
-      fs.readdir('./tab', function(error, filelist){
+      // fs.readdir('./tab', function(error, filelist){
+      //   let list = getList(filelist, theme);
+      //   html = template.home(list, theme);
+      //   response.writeHead(200);
+      //   response.end(html);
+      // })
+      db.query('select * from list', function (error, filelist, fields){
         let list = getList(filelist, theme);
         html = template.home(list, theme);
         response.writeHead(200);
         response.end(html);
-      })
+      });
     }
     //home이 아닐때
     else{
-      fs.readdir('./tab', function(error, tempMenulist){
-        let filteredTitle = path.parse(title).base;
-        fs.readdir(`./tab/${filteredTitle}/data`, function(error, tempTextlist){
-          let menulist = getList(tempMenulist, theme, title);
-          let textlist = null;
-          if(fs.existsSync(`./tab/${title}/img`)){
-            tempImglist = fs.readdirSync(`./tab/${title}/img`)
-            textlist = getListAndText(title, tempTextlist, tempImglist);
-          }
-          else{
-            textlist = getListAndText(title, tempTextlist, null);
-          }
+      // fs.readdir('./tab', function(error, tempMenulist){
+      //   let filteredTitle = path.parse(title).base;
+      //   fs.readdir(`./tab/${filteredTitle}/data`, function(error, tempTextlist){
+      //     let menulist = getList(tempMenulist, theme);
+      //     let textlist = null;
+      //     if(fs.existsSync(`./tab/${title}/img`)){
+      //       tempImglist = fs.readdirSync(`./tab/${title}/img`)
+      //       textlist = getListAndText(title, tempTextlist, tempImglist);
+      //     }
+      //     else{
+      //       textlist = getListAndText(title, tempTextlist, null);
+      //     }
+      //     html = template.menu(menulist, textlist, theme, title);
+      //     response.writeHead(200);
+      //     response.end(html);
+      //   })
+      // })
+      db.query('select * from list', function (error, tempMenulist, fields){
+        db.query('select * from guest', function (error, tempTextlist, fields){
+          let menulist = getList(tempMenulist, theme);
+          let textlist = getListAndText(title, tempTextlist, null);
           html = template.menu(menulist, textlist, theme, title);
           response.writeHead(200);
           response.end(html);
-        })
-      })
+        });
+      });
     }
   }
   else if(pathname === '/style'){
@@ -126,12 +151,18 @@ let app = http.createServer(function(request, response){
     })
   }
   else if(pathname === '/create'){
-    fs.readdir('./tab', function(error, tempMenulist){
+    // fs.readdir('./tab', function(error, tempMenulist){
+    //   let menulist = getList(tempMenulist, theme);
+    //   html = template.create(menulist, theme, title);
+    //   response.writeHead(200);
+    //   response.end(html);
+    // })
+    db.query('select * from list', function (error, tempMenulist, fields){
       let menulist = getList(tempMenulist, theme);
       html = template.create(menulist, theme, title);
       response.writeHead(200);
       response.end(html);
-    })
+    });
   }
   else if(pathname === '/create_process'){
     let body = '';
@@ -140,11 +171,12 @@ let app = http.createServer(function(request, response){
     });
     request.on('end', function(){
       let post = qs.parse(body);
-      let folder = post.folder;
-      let title = post.title;
-      let description = post.description;
-      fs.writeFile(`./tab/${folder}/data/${title}`, description, 'utf8', function(err){
-        response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+      db.query(`insert into ${post.folder}(title, description, created, author) values(?, ?, now(), ?)`,
+        [post.title, post.description, post.author], function (error, result){
+          if(error){
+            throw error;
+          }
+        response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
         response.end();
       });
     });

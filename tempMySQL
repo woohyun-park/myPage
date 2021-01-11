@@ -1,0 +1,31 @@
+-- Table structure for table `topic`
+--
+
+CREATE TABLE `guest` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(30) NOT NULL,
+  `description` text,
+  `created` datetime NOT NULL,
+  `author` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `list` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+INSERT INTO `guest` VALUES (1, '공듀왔다감','항상 열심히하는 모습이 보기 좋아 <3',NOW(), '이연희');
+INSERT INTO `guest` VALUES (2, '나는 신강이다','나 송도동 1짱인데 나랑 싸우자',NOW(),'신강');
+INSERT INTO `guest` VALUES (3, 'Herro','😇💙',NOW(),'류채린');
+INSERT INTO `guest` VALUES (4,'hi','I like ur brand image and style keep up the good work dooddi',NOW(),'이은재');
+INSERT INTO `guest` VALUES (5,'lol','제국애쉬 그만해 ㅅㅂ',NOW(),'강민혁');
+INSERT INTO `guest` VALUES (6,'to dooddi','뚜띠🐶 넘 귀 탱 이 애 오',NOW(),'최혜린');
+INSERT INTO `guest` VALUES (7, 'wowpow','moya 잘 꾸몄네?!?! 신기하당 ㅋㅎㅋㅎㅋㅎㅋ -시아루',NOW(),'루시아');
+INSERT INTO `guest` VALUES (8, '뚜띠!!!!!','나랑 콘서트 꼭 가자미!',NOW(),'신강');
+INSERT INTO `guest` VALUES (9, '정하왔다감','그냥 왔다감.ㅂㅂㅋㅋ',NOW(),'조정하');
+INSERT INTO `guest` VALUES (10,'제발 부탁이야','알람 맞추지 말아줘,,,,
+',NOW(),'김현재');
+INSERT INTO `guest` VALUES (11,'주니어 개발자. 스티븐','미리 선점하여 투자를 하고 싶소.
+',NOW(),'엄마');
