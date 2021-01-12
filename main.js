@@ -11,7 +11,8 @@ let db = mysql.createConnection({
   host    : 'localhost',
   user    : 'root',
   password: 'zxcvZXCV',
-  database: 'myPage'
+  database: 'myPage',
+  charset : 'utf8mb4'
 });
 db.connect();
 
