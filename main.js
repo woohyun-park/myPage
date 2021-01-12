@@ -65,9 +65,9 @@ function getListAndText(title, list, imgList){
       resultList = resultList + `
       <div class="imgBlock">
         <img src="/style?id=./tab/${title}/img/${imgList[i]}" alt="${imgList[i]}">
-        <h2>${list[i]}</h2>
+        <h2>${list[i].title}</h2>
         <div class="font">`;
-      let text = fs.readFileSync(`./tab/${title}/data/${list[i]}`, 'utf8');
+      let text = fs.readFileSync(`./tab/${title}/data/${list[i].title}`, 'utf8');
       resultList = resultList + `${text}
         </div>
         <br>
@@ -111,13 +111,13 @@ let app = http.createServer(function(request, response){
       //   fs.readdir(`./tab/${filteredTitle}/data`, function(error, tempTextlist){
       //     let menulist = getList(tempMenulist, theme);
       //     let textlist = null;
-      //     if(fs.existsSync(`./tab/${title}/img`)){
-      //       tempImglist = fs.readdirSync(`./tab/${title}/img`)
-      //       textlist = getListAndText(title, tempTextlist, tempImglist);
-      //     }
-      //     else{
-      //       textlist = getListAndText(title, tempTextlist, null);
-      //     }
+          // if(fs.existsSync(`./tab/${title}/img`)){
+          //   tempImglist = fs.readdirSync(`./tab/${title}/img`)
+          //   textlist = getListAndText(title, tempTextlist, tempImglist);
+          // }
+          // else{
+          //   textlist = getListAndText(title, tempTextlist, null);
+          // }
       //     html = template.menu(menulist, textlist, theme, title);
       //     response.writeHead(200);
       //     response.end(html);
@@ -125,9 +125,16 @@ let app = http.createServer(function(request, response){
       // })
       db.query('select * from list', function (error, tempMenulist, fields){
         db.query(`select * from ${title}`, function (error, tempTextlist, fields){
-          console.log('1');
           let menulist = getList(tempMenulist, theme);
-          let textlist = getListAndText(title, tempTextlist, null);
+          let textlist = null;
+          if(fs.existsSync(`./tab/${title}/img`)){
+            console.log(title);
+            tempImglist = fs.readdirSync(`./tab/${title}/img`)
+            textlist = getListAndText(title, tempTextlist, tempImglist);
+          }
+          else{
+            textlist = getListAndText(title, tempTextlist, null);
+          }
           html = template.menu(menulist, textlist, theme, title);
           response.writeHead(200);
           response.end(html);
@@ -198,69 +205,69 @@ let app = http.createServer(function(request, response){
     //   });
     // });
   }
-  // else if(pathname === '/update'){
-  //   fs.readdir('./tab', function(error, tempMenulist){
-  //     let body = '';
-  //     request.on('data', function(data){
-  //         body = body + data;
-  //     });
-  //     request.on('end', function(){
-  //       let post = qs.parse(body);
-  //       let textTitle = post.title;
-  //       let menulist = getList(tempMenulist, theme);
-  //       fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(error, text){
-  //         html = template.update(menulist, theme, title, textTitle, text);
-  //         response.writeHead(200);
-  //         response.end(html);
-  //       });
-  //     });
-  //   })
-  // }
-  // else if(pathname === '/update_process'){
-  //   let form = new formidable.IncomingForm();
-  //   form.parse(request, function(err, fields, files){
-  //     let fileName = fields.fileName;
-  //     let folder = fields.folder;
-  //     let title = fields.title;
-  //     let description = fields.description;
-  //     let filteredFolder = path.parse(folder).base;
-  //     let filteredTitle = path.parse(title).base;
-  //     let oldpathText = `./tab/${filteredFolder}/data/${fileName}`;
-  //     let newpathText = `./tab/${filteredFolder}/data/${filteredTitle}`;
-  //     let oldpathImg = `./tab/${filteredFolder}/img/${fileName}.png`;
-  //     let newpathImg = `./tab/${filteredFolder}/img/${filteredTitle}.png`;
-  //     fs.rename(oldpathText, newpathText, function(err){
-  //       fs.writeFile(newpathText, description, 'utf8', function(err){
-  //         fs.rename(oldpathImg, newpathImg, function(err){
-  //           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
-  //           response.end();
-  //         })
-  //       });
-  //     });
-  //   });
-  // }
-  // else if(pathname === '/delete_process'){
-  //   let body = '';
-  //   request.on('data', function(data){
-  //     body = body + data;
-  //   })
-  //   request.on('end', function(){
-  //     let post = qs.parse(body);
-  //     let title = post.title;
-  //     let folder = queryData.id;
-  //     let filteredFolder = path.parse(folder).base;
-  //     let filteredTitle = path.parse(title).base;
-  //     fs.unlink(`./tab/${filteredFolder}/data/${filteredTitle}`, function(error){
-  //       fs.unlink(`./tab/${filteredFolder}/img/${filteredTitle}.png`, function(error){
-  //         response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
-  //         response.end();
-  //       });
-  //     })
-  //   })
-  // }
+  else if(pathname === '/update'){
+    fs.readdir('./tab', function(error, tempMenulist){
+      let body = '';
+      request.on('data', function(data){
+          body = body + data;
+      });
+      request.on('end', function(){
+        let post = qs.parse(body);
+        let textTitle = post.title;
+        let menulist = getList(tempMenulist, theme);
+        fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(error, text){
+          html = template.update(menulist, theme, title, textTitle, text);
+          response.writeHead(200);
+          response.end(html);
+        });
+      });
+    })
+  }
+  else if(pathname === '/update_process'){
+    let form = new formidable.IncomingForm();
+    form.parse(request, function(err, fields, files){
+      let fileName = fields.fileName;
+      let folder = fields.folder;
+      let title = fields.title;
+      let description = fields.description;
+      let filteredFolder = path.parse(folder).base;
+      let filteredTitle = path.parse(title).base;
+      let oldpathText = `./tab/${filteredFolder}/data/${fileName}`;
+      let newpathText = `./tab/${filteredFolder}/data/${filteredTitle}`;
+      let oldpathImg = `./tab/${filteredFolder}/img/${fileName}.png`;
+      let newpathImg = `./tab/${filteredFolder}/img/${filteredTitle}.png`;
+      fs.rename(oldpathText, newpathText, function(err){
+        fs.writeFile(newpathText, description, 'utf8', function(err){
+          fs.rename(oldpathImg, newpathImg, function(err){
+            response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+            response.end();
+          })
+        });
+      });
+    });
+  }
+  else if(pathname === '/delete_process'){
+    let body = '';
+    request.on('data', function(data){
+      body = body + data;
+    })
+    request.on('end', function(){
+      let post = qs.parse(body);
+      let title = post.title;
+      let folder = queryData.id;
+      let filteredFolder = path.parse(folder).base;
+      let filteredTitle = path.parse(title).base;
+      fs.unlink(`./tab/${filteredFolder}/data/${filteredTitle}`, function(error){
+        fs.unlink(`./tab/${filteredFolder}/img/${filteredTitle}.png`, function(error){
+          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+          response.end();
+        });
+      })
+    })
+  }
   else{
     response.writeHead(404);
     response.end('Not Found');
   }
 })
-app.listen(3000);
+app.listen(1218);
