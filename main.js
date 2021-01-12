@@ -67,7 +67,7 @@ function getListAndText(title, list, imgList){
         <img src="/style?id=./tab/${title}/img/${imgList[i]}" alt="${imgList[i]}">
         <h2>${list[i].title}</h2>
         <div class="font">`;
-      let text = fs.readFileSync(`./tab/${title}/data/${list[i].title}`, 'utf8');
+      let text = list[i].description;
       resultList = resultList + `${text}
         </div>
         <br>
@@ -91,12 +91,6 @@ let app = http.createServer(function(request, response){
   if(pathname === '/'){
     //home일때
     if(queryData.id === undefined){
-      // fs.readdir('./tab', function(error, filelist){
-      //   let list = getList(filelist, theme);
-      //   html = template.home(list, theme);
-      //   response.writeHead(200);
-      //   response.end(html);
-      // })
       db.query('select * from list', function (error, filelist, fields){
         let list = getList(filelist, theme);
         html = template.home(list, theme);
@@ -106,23 +100,6 @@ let app = http.createServer(function(request, response){
     }
     //home이 아닐때
     else{
-      // fs.readdir('./tab', function(error, tempMenulist){
-      //   let filteredTitle = path.parse(title).base;
-      //   fs.readdir(`./tab/${filteredTitle}/data`, function(error, tempTextlist){
-      //     let menulist = getList(tempMenulist, theme);
-      //     let textlist = null;
-          // if(fs.existsSync(`./tab/${title}/img`)){
-          //   tempImglist = fs.readdirSync(`./tab/${title}/img`)
-          //   textlist = getListAndText(title, tempTextlist, tempImglist);
-          // }
-          // else{
-          //   textlist = getListAndText(title, tempTextlist, null);
-          // }
-      //     html = template.menu(menulist, textlist, theme, title);
-      //     response.writeHead(200);
-      //     response.end(html);
-      //   })
-      // })
       db.query('select * from list', function (error, tempMenulist, fields){
         db.query(`select * from ${title}`, function (error, tempTextlist, fields){
           let menulist = getList(tempMenulist, theme);
@@ -158,12 +135,6 @@ let app = http.createServer(function(request, response){
     })
   }
   else if(pathname === '/create'){
-    // fs.readdir('./tab', function(error, tempMenulist){
-    //   let menulist = getList(tempMenulist, theme);
-    //   html = template.create(menulist, theme, title);
-    //   response.writeHead(200);
-    //   response.end(html);
-    // })
     db.query('select * from list', function (error, tempMenulist, fields){
       let menulist = getList(tempMenulist, theme);
       html = template.create(menulist, theme, title);
@@ -178,32 +149,27 @@ let app = http.createServer(function(request, response){
     });
     request.on('end', function(){
       let post = qs.parse(body);
-      db.query(`insert into ${post.folder}(title, description, created, author) values(?, ?, now(), ?)`,
-        [post.title, post.description, post.author], function (error, result){
-          if(error){
-            throw error;
-          }
-        response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
-        response.end();
-      });
+      if(post.folder == 'guest'){
+        db.query(`insert into ${post.folder}(title, description, created, author) values(?, ?, now(), ?)`,
+          [post.title, post.description, post.author], function (error, result){
+            if(error){
+              throw error;
+            }
+          response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
+          response.end();
+        });
+      }
+      else{
+        db.query(`insert into ${post.folder}(title, description, created) values(?, ?, now())`,
+          [post.title, post.description], function (error, result){
+            if(error){
+              throw error;
+            }
+          response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
+          response.end();
+        });
+      }
     });
-    //
-    // let form = new formidable.IncomingForm();
-    // form.parse(request, function(err, fields, files){
-    //   let folder = fields.folder;
-    //   let title = fields.title;
-    //   let description = fields.description;
-    //   let filteredTitle = path.parse(title).base;
-    //   let oldpath = files.file.path;
-    //   let imgType = files.file.type.split('/')[1];
-    //   let newpath = `./tab/${folder}/img/${filteredTitle}.${imgType}`;
-    //   fs.rename(oldpath, newpath, function(err){
-    //     fs.writeFile(`./tab/${folder}/data/${filteredTitle}`, description, 'utf8', function(err){
-    //       response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
-    //       response.end();
-    //     });
-    //   });
-    // });
   }
   else if(pathname === '/update'){
     fs.readdir('./tab', function(error, tempMenulist){

@@ -1,5 +1,0 @@
-static: 기본<br>
-relative: 기본 자리를 기준으로<br>
-absolute: 상자 모서리를 기준으로<br>
-fixed: 상자 밖 페이지 모서리를 기준으로<br>
-sticky: 스크롤해도 기본 자리 유지<br>

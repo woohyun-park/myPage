@@ -1,9 +1,0 @@
-1. git 디렉토리 탐색<br>
-2. git 명령어 사용!<br>
-*기본 명령어<br>
--git log: 기록을 표시<br>
--git status: 상태를  표시<br>
--git add -A: 현재까지의 변경사항을 커밋할수 있도록 준비<br>
--git commit -m "title": add된 현재까지의 변경사항을 title이라는 이름으로 저장<br>
--git reset ****** --hard: ******의 상태로 백업<br>
--git revert ****** + (:wq): ******의 상태로 새롭게 커밋<br>
