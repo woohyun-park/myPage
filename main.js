@@ -25,10 +25,10 @@ function getList(list, theme){
   return resultList;
 }
 
-function getListAndText(title, list, imgList){
+function getListAndText(title, list, isImgExist){
   let resultList = '';
   let i = 0;
-  if(imgList == null){
+  if(isImgExist == false){
     while(i < list.length){
       let sanitizeTitle = sanitizeHtml(list[i].title);
       if(title == 'guest'){
@@ -64,7 +64,7 @@ function getListAndText(title, list, imgList){
     while(i < list.length){
       resultList = resultList + `
       <div class="imgBlock">
-        <img src="/style?id=./tab/${title}/img/${imgList[i]}" alt="${imgList[i]}">
+        <img src="/style?id=${list[i].dir}" alt="${list[i].title}">
         <h2>${list[i].title}</h2>
         <div class="font">`;
       let text = list[i].description;
@@ -105,12 +105,10 @@ let app = http.createServer(function(request, response){
           let menulist = getList(tempMenulist, theme);
           let textlist = null;
           if(fs.existsSync(`./tab/${title}/img`)){
-            console.log(title);
-            tempImglist = fs.readdirSync(`./tab/${title}/img`)
-            textlist = getListAndText(title, tempTextlist, tempImglist);
+            textlist = getListAndText(title, tempTextlist, true);
           }
           else{
-            textlist = getListAndText(title, tempTextlist, null);
+            textlist = getListAndText(title, tempTextlist, false);
           }
           html = template.menu(menulist, textlist, theme, title);
           response.writeHead(200);
@@ -143,33 +141,75 @@ let app = http.createServer(function(request, response){
     });
   }
   else if(pathname === '/create_process'){
-    let body = '';
-    request.on('data', function(data){
-      body = body + data;
-    });
-    request.on('end', function(){
-      let post = qs.parse(body);
-      if(post.folder == 'guest'){
-        db.query(`insert into ${post.folder}(title, description, created, author) values(?, ?, now(), ?)`,
-          [post.title, post.description, post.author], function (error, result){
+    // let body = '';
+    // request.on('data', function(data){
+    //   body = body + data;
+    // });
+    // request.on('end', function(){
+    //   let post = qs.parse(body);
+      // if(post.folder == 'guest'){
+      //   db.query(`insert into ${post.folder}(title, description, created, author) values(?, ?, now(), ?)`,
+      //     [post.title, post.description, post.author], function (error, result){
+      //       if(error){
+      //         throw error;
+      //       }
+      //     response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
+      //     response.end();
+      //   });
+      // }
+    //   else{
+    //     db.query(`insert into ${post.folder}(title, description, created) values(?, ?, now())`,
+    //       [post.title, post.description], function (error, result){
+    //         if(error){
+    //           throw error;
+    //         }
+    //       response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
+    //       response.end();
+    //     });
+    //   }
+    // });
+    let form = new formidable.IncomingForm();
+    form.parse(request, function(err, fields, files){
+      let folder = fields.folder;
+      let title = fields.title;
+      let description = fields.description;
+      if(folder == 'guest'){
+        let author = fields.author;
+        db.query(`insert into ${folder}(title, description, created, author) values('${title}', '${description}', now(), '${author}')`, function (error, result){
             if(error){
               throw error;
             }
-          response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
+          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
+        });
+      }
+      else if(folder == 'design' || folder == 'music'){
+        db.query(`insert into ${folder}(title, description, created) values('${title}', '${description}', now())`, function (error, result){
+          db.query(`select id FROM ${folder} order by id desc limit 1`, function(error2, result2, fields2){
+            let id = result2[0].id;
+            let oldpath = files.file.path;
+            let imgType = files.file.type.split('/')[1];
+            let newpath = `./tab/${folder}/img/${id}.${imgType}`;
+            db.query(`update ${folder} set dir='${newpath}' where id='${id}'`, function(error3){
+              fs.rename(oldpath, newpath, function(err){
+                db.query('')
+                response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+                response.end();
+              });
+            })
+          });
         });
       }
       else{
-        db.query(`insert into ${post.folder}(title, description, created) values(?, ?, now())`,
-          [post.title, post.description], function (error, result){
+        db.query(`insert into ${folder}(title, description, created) values('${title}', '${description}', now())`, function (error, result){
             if(error){
               throw error;
             }
-          response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
+          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
         });
       }
-    });
+    })
   }
   else if(pathname === '/update'){
     fs.readdir('./tab', function(error, tempMenulist){
@@ -218,27 +258,27 @@ let app = http.createServer(function(request, response){
       body = body + data;
     })
     request.on('end', function(){
-      // let post = qs.parse(body);
-      // let title = post.title;
-      // let folder = queryData.id;
-      // let filteredFolder = path.parse(folder).base;
-      // let filteredTitle = path.parse(title).base;
-      // fs.unlink(`./tab/${filteredFolder}/data/${filteredTitle}`, function(error){
-      //   fs.unlink(`./tab/${filteredFolder}/img/${filteredTitle}.png`, function(error){
-          // response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
-          // response.end();
-      //   });
-      // })
       let post = qs.parse(body);
       let title = post.title;
       let folder = queryData.id;
-      let filteredTitle = path.parse(title).base;
-      fs.unlink(`./tab/${folder}/img/${filteredTitle}.png`, function(error){
-        db.query(`DELETE FROM ${folder} WHERE title = '${title}'`, function(){
-          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
-          response.end();
+      if(folder == 'design' || folder == 'music'){
+        db.query(`SELECT * FROM ${folder} WHERE title = '${title}'`, function(error, result){
+          fs.unlink(result[0].dir, function(error){
+            db.query(`DELETE FROM ${folder} WHERE title = '${title}'`, function(){
+              response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+              response.end();
+            });
+          });
         });
-      });
+      }
+      else{
+        db.query(`SELECT * FROM ${folder} WHERE title = '${title}'`, function(error, result){
+          db.query(`DELETE FROM ${folder} WHERE title = '${title}'`, function(){
+            response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+            response.end();
+          });
+        });
+      }
     });
   }
   else{
