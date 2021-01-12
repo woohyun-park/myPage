@@ -218,18 +218,28 @@ let app = http.createServer(function(request, response){
       body = body + data;
     })
     request.on('end', function(){
+      // let post = qs.parse(body);
+      // let title = post.title;
+      // let folder = queryData.id;
+      // let filteredFolder = path.parse(folder).base;
+      // let filteredTitle = path.parse(title).base;
+      // fs.unlink(`./tab/${filteredFolder}/data/${filteredTitle}`, function(error){
+      //   fs.unlink(`./tab/${filteredFolder}/img/${filteredTitle}.png`, function(error){
+          // response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+          // response.end();
+      //   });
+      // })
       let post = qs.parse(body);
       let title = post.title;
       let folder = queryData.id;
-      let filteredFolder = path.parse(folder).base;
       let filteredTitle = path.parse(title).base;
-      fs.unlink(`./tab/${filteredFolder}/data/${filteredTitle}`, function(error){
-        fs.unlink(`./tab/${filteredFolder}/img/${filteredTitle}.png`, function(error){
+      fs.unlink(`./tab/${folder}/img/${filteredTitle}.png`, function(error){
+        db.query(`DELETE FROM ${folder} WHERE title = '${title}'`, function(){
           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
         });
-      })
-    })
+      });
+    });
   }
   else{
     response.writeHead(404);
