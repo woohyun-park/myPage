@@ -162,7 +162,7 @@ let app = http.createServer(function(request, response){
           response.end();
         });
       }
-      //design 또는 music일 경우
+      //이미지가 있는 경우
       else if(folder == 'design' || folder == 'music'){
         db.query(`insert into ${folder}(title, description, created) values('${title}', '${description}', now())`, function (err2){
           if(err2){throw err2;}
@@ -183,7 +183,7 @@ let app = http.createServer(function(request, response){
           });
         });
       }
-      //그 외의 경우
+      //이미지가 없는 경우
       else{
         db.query(`insert into ${folder}(title, description, created) values('${title}', '${description}', now())`, function (err2){
           if(err2){throw err2;}
@@ -194,50 +194,107 @@ let app = http.createServer(function(request, response){
     })
   }
   else if(pathname === '/update'){
-    fs.readdir('./tab', function(err, tempMenulist){
-      if(err){throw err;}
-      let body = '';
-      request.on('data', function(data){
-          body = body + data;
-      });
-      request.on('end', function(){
+    let body = '';
+    request.on('data', function(data){
+        body = body + data;
+    });
+    request.on('end', function(){
+      db.query('select * from list', function (err, tempMenus){
+        if(err){throw err;}
         let post = qs.parse(body);
-        let textTitle = post.title;
-        let menulist = getMenus(tempMenulist, theme);
-        fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(err2, text){
-          if(err2){throw err2;}
-          html = template.update(menulist, theme, title, textTitle, text);
-          response.writeHead(200);
-          response.end(html);
-        });
+        let title = post.title;
+        let menus = getMenus(tempMenus, theme);
+        //제목을 입력하지 않았을 경우
+        if(title == ''){
+          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+          response.end();
+        }
+        //guest인 경우
+        if(folder == 'guest'){
+          db.query(`select * from ${folder} where title = '${title}'`, function(err2, tempPost){
+            if(err2){throw err2;}
+            html = template.update(menus, theme, folder, tempPost);
+            response.writeHead(200);
+            response.end(html);
+          })
+        }
+        //이미지가 있는 경우
+        else if(folder == 'design' || folder == 'music'){
+          db.query(`select * from ${folder} where title = '${title}'`, function(err2, tempPost){
+            if(err2){throw err2;}
+            html = template.update(menus, theme, folder, tempPost);
+            response.writeHead(200);
+            response.end(html);
+          })
+        }
+        //이미지가 없는 경우
+        else{
+          db.query(`select * from ${folder} where title = '${title}'`, function(err2, tempPost){
+            if(err2){throw err2;}
+            //잘못된 타이틀을 입력한 경우
+            if(tempPost[0] == undefined){
+              response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+              response.end();
+            }
+            let description = tempPost[0].description;
+            html = template.update(menus, theme, folder, tempPost);
+            response.writeHead(200);
+            response.end(html);
+          })
+        }
       });
-    })
+    });
   }
   else if(pathname === '/update_process'){
     let form = new formidable.IncomingForm();
     form.parse(request, function(err, fields, files){
       if(err){throw err;}
-      let fileName = fields.fileName;
+      let oldTitle = fields.fileName;
       let folder = fields.folder;
-      let title = fields.title;
+      let newTitle = fields.title;
       let description = fields.description;
-      let filteredFolder = path.parse(folder).base;
-      let filteredTitle = path.parse(title).base;
-      let oldpathText = `./tab/${filteredFolder}/data/${fileName}`;
-      let newpathText = `./tab/${filteredFolder}/data/${filteredTitle}`;
-      let oldpathImg = `./tab/${filteredFolder}/img/${fileName}.png`;
-      let newpathImg = `./tab/${filteredFolder}/img/${filteredTitle}.png`;
-      fs.rename(oldpathText, newpathText, function(err){
-        if(err2){throw err2;}
-        fs.writeFile(newpathText, description, 'utf8', function(err){
-          if(err3){throw err3;}
-          fs.rename(oldpathImg, newpathImg, function(err){
-            if(err4){throw err4;}
-            response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+      let fFolder = path.parse(folder).base;
+      let fTitle = path.parse(newTitle).base;
+      //guest일 경우
+      if(folder == 'guest'){
+        let author = fields.author;
+        db.query(`update ${fFolder} set title='${fTitle}', description='${description}', author='${author}' where title='${oldTitle}'`, function(err){
+          response.writeHead(302, {'Location': `/?id=${fFolder}&theme=${theme}`});
+          response.end();
+        })
+      }
+      //이미지가 있는 경우
+      else if(folder == 'design' || folder == 'music'){
+        db.query(`update ${fFolder} set title='${fTitle}', description='${description}' where title='${oldTitle}'`, function(err){
+          if(err){throw err;}
+          //이미지를 업로드하지 않은 경우
+          if(files.file.name == ''){
+            response.writeHead(302, {'Location': `/?id=${fFolder}&theme=${theme}`});
             response.end();
-          })
-        });
-      });
+          }
+          //이미지를 업로드 한 경우
+          else{
+            db.query(`select * from ${fFolder} where title='${fTitle}'`, function(err2, result){
+              if(err2){throw err;}
+              let oldpath = files.file.path;
+              let imgType = files.file.type.split('/')[1];
+              let newpath = result[0].dir;
+              fs.rename(oldpath, newpath, function(err3){
+                if(err3){throw err3;}
+                response.writeHead(302, {'Location': `/?id=${fFolder}&theme=${theme}`});
+                response.end();
+              })
+            })
+          }
+        })
+      }
+      //이미지가 없는 경우
+      else{
+        db.query(`update ${fFolder} set title='${fTitle}', description='${description}' where title='${oldTitle}'`, function(err){
+          response.writeHead(302, {'Location': `/?id=${fFolder}&theme=${theme}`});
+          response.end();
+        })
+      }
     });
   }
   else if(pathname === '/delete_process'){
