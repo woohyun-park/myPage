@@ -15,73 +15,74 @@ let db = mysql.createConnection({
 });
 db.connect();
 
-function getList(list, theme){
-  let resultList = `<a href='/?theme=${theme}' id="menu-0" class="menu">home</a>`;
+function getMenus(menus, theme){
+  let result = `<a href='/?theme=${theme}' id="menu-0" class="menu">home</a>`;
   let i = 0;
-  while(i < list.length){
-    resultList = resultList + `<a href="/?id=${list[i].title}&theme=${theme}" id="menu-${i+1}" class="menu">${list[i].title} </a>`;
+  while(i < menus.length){
+    result = result + `<a href="/?id=${menus[i].title}&theme=${theme}" id="menu-${i+1}" class="menu">${menus[i].title} </a>`;
     i = i + 1;
   }
-  return resultList;
+  return result;
 }
 
-function getListAndText(title, list, isImgExist){
-  let resultList = '';
+function getPosts(folder, posts, isImgExist){
+  let result = '';
   let i = 0;
-  if(isImgExist == false){
-    while(i < list.length){
-      let sanitizeTitle = sanitizeHtml(list[i].title);
-      if(title == 'guest'){
-        resultList = resultList + `
+  while(i < posts.length){
+    let sTitle = sanitizeHtml(posts[i].title);
+    let sDescription = sanitizeHtml(posts[i].description);
+    //이미지가 없는 폴더의 경우
+    if(isImgExist == false){
+      //guest일 경우 제목 h4, author 표시
+      if(folder == 'guest'){
+        let author = posts[i].author;
+        result = result + `
         <div class="imgBlock">
-          <h4>${sanitizeTitle}</h4>
+          <h4>${sTitle}</h4>
           <div class="font">`;
-        let text = list[i].description;
-        let author = list[i].author;
-        resultList = resultList + `${text}
+        result = result + `${sDescription}
           </div>
           <div style="text-align: right;">-${author}</div>
           <br>
         </div>`;
         i = i + 1;
       }
+      //그 외의 경우 제목 h2, author 미표시
       else{
-        resultList = resultList + `
+        result = result + `
         <div class="imgBlock">
-          <h2>${sanitizeTitle}</h2>
+          <h2>${sTitle}</h2>
           <div class="font">`;
-        let text = list[i].description;
-        let sanitizeText = sanitizeHtml(text);
-        resultList = resultList + `${sanitizeText}
+        result = result + `${sDescription}
           </div>
           <br>
         </div>`;
         i = i + 1;
       }
     }
-  }
-  else{
-    while(i < list.length){
-      resultList = resultList + `
+    //이미지가 있는 폴더의 경우
+    else{
+      let dir = posts[i].dir;
+      result = result + `
       <div class="imgBlock">
-        <img src="/style?id=${list[i].dir}" alt="${list[i].title}">
-        <h2>${list[i].title}</h2>
+        <img src="/style?id=${dir}" alt="${sTitle}">
+        <h2>${sTitle}</h2>
         <div class="font">`;
-      let text = list[i].description;
-      resultList = resultList + `${text}
+      let text = posts[i].description;
+      result = result + `${sDescription}
         </div>
         <br>
       </div>`;
       i = i + 1;
     }
   }
-  return resultList;
+  return result;
 }
 
 let app = http.createServer(function(request, response){
   let _url = request.url;
   let queryData = url.parse(_url, true).query;
-  let title = queryData.id;
+  let folder = queryData.id;
   let html = '';
   let pathname = url.parse(_url, true).pathname;
   let theme = queryData.theme;
@@ -90,27 +91,30 @@ let app = http.createServer(function(request, response){
   }
   if(pathname === '/'){
     //home일때
-    if(queryData.id === undefined){
-      db.query('select * from list', function (error, filelist, fields){
-        let list = getList(filelist, theme);
-        html = template.home(list, theme);
+    if(folder === undefined){
+      db.query('select * from list', function (err, tempMenus){
+        if(err){throw err;}
+        let menus = getMenus(tempMenus, theme);
+        html = template.home(menus, theme);
         response.writeHead(200);
         response.end(html);
       });
     }
     //home이 아닐때
     else{
-      db.query('select * from list', function (error, tempMenulist, fields){
-        db.query(`select * from ${title}`, function (error, tempTextlist, fields){
-          let menulist = getList(tempMenulist, theme);
-          let textlist = null;
-          if(fs.existsSync(`./tab/${title}/img`)){
-            textlist = getListAndText(title, tempTextlist, true);
+      db.query('select * from list', function (err, tempMenus){
+        if(err){throw err;}
+        db.query(`select * from ${folder}`, function (err2, tempPosts){
+          if(err2){throw err2;}
+          let menus = getMenus(tempMenus, theme);
+          let posts = null;
+          if(fs.existsSync(`./tab/${folder}`)){
+            posts = getPosts(folder, tempPosts, true);
           }
           else{
-            textlist = getListAndText(title, tempTextlist, false);
+            posts = getPosts(folder, tempPosts, false);
           }
-          html = template.menu(menulist, textlist, theme, title);
+          html = template.menu(menus, posts, theme, folder);
           response.writeHead(200);
           response.end(html);
         });
@@ -120,6 +124,7 @@ let app = http.createServer(function(request, response){
   else if(pathname === '/style'){
     let file = url.parse(_url, true).query.id;
     fs.readFile(file, function(err, file){
+      if(err){throw err;}
       if(url.parse(_url, true).query.type == 'css'){
         response.writeHead(200, {'Content-Type': 'text/css'});
       }
@@ -133,66 +138,44 @@ let app = http.createServer(function(request, response){
     })
   }
   else if(pathname === '/create'){
-    db.query('select * from list', function (error, tempMenulist, fields){
-      let menulist = getList(tempMenulist, theme);
-      html = template.create(menulist, theme, title);
+    db.query('select * from list', function (err, tempMenus){
+      if(err){throw err;}
+      let menus = getMenus(tempMenus, theme);
+      html = template.create(menus, theme, folder);
       response.writeHead(200);
       response.end(html);
     });
   }
   else if(pathname === '/create_process'){
-    // let body = '';
-    // request.on('data', function(data){
-    //   body = body + data;
-    // });
-    // request.on('end', function(){
-    //   let post = qs.parse(body);
-      // if(post.folder == 'guest'){
-      //   db.query(`insert into ${post.folder}(title, description, created, author) values(?, ?, now(), ?)`,
-      //     [post.title, post.description, post.author], function (error, result){
-      //       if(error){
-      //         throw error;
-      //       }
-      //     response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
-      //     response.end();
-      //   });
-      // }
-    //   else{
-    //     db.query(`insert into ${post.folder}(title, description, created) values(?, ?, now())`,
-    //       [post.title, post.description], function (error, result){
-    //         if(error){
-    //           throw error;
-    //         }
-    //       response.writeHead(302, {'Location': `/?id=${post.folder}&theme=${theme}`});
-    //       response.end();
-    //     });
-    //   }
-    // });
     let form = new formidable.IncomingForm();
     form.parse(request, function(err, fields, files){
+      if(err){throw err;}
       let folder = fields.folder;
       let title = fields.title;
       let description = fields.description;
+      //guest일 경우
       if(folder == 'guest'){
         let author = fields.author;
-        db.query(`insert into ${folder}(title, description, created, author) values('${title}', '${description}', now(), '${author}')`, function (error, result){
-            if(error){
-              throw error;
-            }
+        db.query(`insert into ${folder}(title, description, created, author) values('${title}', '${description}', now(), '${author}')`, function (err2){
+          if(err2){throw err2;}
           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
         });
       }
+      //design 또는 music일 경우
       else if(folder == 'design' || folder == 'music'){
-        db.query(`insert into ${folder}(title, description, created) values('${title}', '${description}', now())`, function (error, result){
-          db.query(`select id FROM ${folder} order by id desc limit 1`, function(error2, result2, fields2){
-            let id = result2[0].id;
+        db.query(`insert into ${folder}(title, description, created) values('${title}', '${description}', now())`, function (err2){
+          if(err2){throw err2;}
+          db.query(`select id FROM ${folder} order by id desc limit 1`, function(err3, result){
+            if(err3){throw err3;}
+            let id = result[0].id;
             let oldpath = files.file.path;
             let imgType = files.file.type.split('/')[1];
-            let newpath = `./tab/${folder}/img/${id}.${imgType}`;
-            db.query(`update ${folder} set dir='${newpath}' where id='${id}'`, function(error3){
-              fs.rename(oldpath, newpath, function(err){
-                db.query('')
+            let newpath = `./tab/${folder}/${id}.${imgType}`;
+            db.query(`update ${folder} set dir='${newpath}' where id='${id}'`, function(err4){
+              if(err4){throw err4;}
+              fs.rename(oldpath, newpath, function(err5){
+                if(err5){throw err5;}
                 response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
                 response.end();
               });
@@ -200,11 +183,10 @@ let app = http.createServer(function(request, response){
           });
         });
       }
+      //그 외의 경우
       else{
-        db.query(`insert into ${folder}(title, description, created) values('${title}', '${description}', now())`, function (error, result){
-            if(error){
-              throw error;
-            }
+        db.query(`insert into ${folder}(title, description, created) values('${title}', '${description}', now())`, function (err2){
+          if(err2){throw err2;}
           response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
           response.end();
         });
@@ -212,7 +194,8 @@ let app = http.createServer(function(request, response){
     })
   }
   else if(pathname === '/update'){
-    fs.readdir('./tab', function(error, tempMenulist){
+    fs.readdir('./tab', function(err, tempMenulist){
+      if(err){throw err;}
       let body = '';
       request.on('data', function(data){
           body = body + data;
@@ -220,8 +203,9 @@ let app = http.createServer(function(request, response){
       request.on('end', function(){
         let post = qs.parse(body);
         let textTitle = post.title;
-        let menulist = getList(tempMenulist, theme);
-        fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(error, text){
+        let menulist = getMenus(tempMenulist, theme);
+        fs.readFile(`./tab/${title}/data/${textTitle}`, 'utf8', function(err2, text){
+          if(err2){throw err2;}
           html = template.update(menulist, theme, title, textTitle, text);
           response.writeHead(200);
           response.end(html);
@@ -232,6 +216,7 @@ let app = http.createServer(function(request, response){
   else if(pathname === '/update_process'){
     let form = new formidable.IncomingForm();
     form.parse(request, function(err, fields, files){
+      if(err){throw err;}
       let fileName = fields.fileName;
       let folder = fields.folder;
       let title = fields.title;
@@ -243,8 +228,11 @@ let app = http.createServer(function(request, response){
       let oldpathImg = `./tab/${filteredFolder}/img/${fileName}.png`;
       let newpathImg = `./tab/${filteredFolder}/img/${filteredTitle}.png`;
       fs.rename(oldpathText, newpathText, function(err){
+        if(err2){throw err2;}
         fs.writeFile(newpathText, description, 'utf8', function(err){
+          if(err3){throw err3;}
           fs.rename(oldpathImg, newpathImg, function(err){
+            if(err4){throw err4;}
             response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
             response.end();
           })
@@ -256,14 +244,22 @@ let app = http.createServer(function(request, response){
     let body = '';
     request.on('data', function(data){
       body = body + data;
-    })
+    });
     request.on('end', function(){
       let post = qs.parse(body);
       let title = post.title;
       let folder = queryData.id;
+      //제목을 입력하지 않았을 경우
+      if(title == ''){
+        response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+        response.end();
+      }
+      //이미지가 있는 경우
       if(folder == 'design' || folder == 'music'){
-        db.query(`SELECT * FROM ${folder} WHERE title = '${title}'`, function(error, result){
-          fs.unlink(result[0].dir, function(error){
+        db.query(`SELECT * FROM ${folder} WHERE title = '${title}'`, function(err, result){
+          if(err){throw err;}
+          fs.unlink(result[0].dir, function(err2){
+            if(err2){throw err2;}
             db.query(`DELETE FROM ${folder} WHERE title = '${title}'`, function(){
               response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
               response.end();
@@ -271,12 +267,12 @@ let app = http.createServer(function(request, response){
           });
         });
       }
+      //이미지가 없는 경우
       else{
-        db.query(`SELECT * FROM ${folder} WHERE title = '${title}'`, function(error, result){
-          db.query(`DELETE FROM ${folder} WHERE title = '${title}'`, function(){
-            response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
-            response.end();
-          });
+        db.query(`DELETE FROM ${folder} WHERE title = '${title}'`, function(err){
+          if(err){throw err;}
+          response.writeHead(302, {'Location': `/?id=${folder}&theme=${theme}`});
+          response.end();
         });
       }
     });
