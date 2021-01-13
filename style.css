@@ -42,6 +42,10 @@ input[type=text]{
   margin-bottom: 5px;
 }
 
+input[type=file]{
+  display: none;
+}
+
 input[type=submit]{
   background: none;
   border: none;
@@ -99,6 +103,11 @@ body{
 
 .middle__block a:hover{
   font-weight: 700;
+}
+
+.middle__file:hover{
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .left a:hover{
