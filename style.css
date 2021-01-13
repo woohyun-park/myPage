@@ -5,6 +5,35 @@
   border: 1px solid red;
 } */
 
+a, a:link, a:visited{
+  display: block;
+  color: black;
+  text-decoration: none;
+}
+
+button{
+  appearance: none;
+  border: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  width:7%;
+  min-width: 50px;
+}
+
+button img{
+  width: 20px;
+}
+
+button img:hover{
+  width: 22px;
+}
+
+button:focus{
+  outline: none;
+}
+
 input[type=text]{
   outline-style: none;
   border:none;
@@ -21,43 +50,12 @@ input[type=submit]{
   padding: 0;
 }
 
-textarea{
-  border:none;
-}
-
 input[type=submit]:hover{
   font-weight: 700;
 }
 
-#menu-create{
-  margin-top: 20px;
-}
-
-.three{
-  column-width:270px;
-  column-gap: 15px;
-}
-
-.two{
-  column-width:400px;
-  column-gap: 15px;
-}
-
-.imgBlock{
-  display: inline-block;
-  margin:0;
-  padding:0px 10px 0px 10px;
-  width: 100%;
-  height: 100%;
-}
-
-.imgBlock img{
-  width: 100%;
-  padding-bottom: 5%;
-}
-
-.imgBlock a:hover{
-  font-weight: 700;
+textarea{
+  border:none;
 }
 
 body{
@@ -76,10 +74,31 @@ body{
   width: 10%;
 }
 
-a, a:link, a:visited{
-  display: block;
-  color: black;
-  text-decoration: none;
+.middle__column--three{
+  column-width:270px;
+  column-gap: 15px;
+}
+
+.middle__column--two{
+  column-width:400px;
+  column-gap: 15px;
+}
+
+.middle__block{
+  display: inline-block;
+  margin:0;
+  padding:0px 10px 0px 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.middle__block img{
+  width: 100%;
+  padding-bottom: 5%;
+}
+
+.middle__block a:hover{
+  font-weight: 700;
 }
 
 .left a:hover{
@@ -113,6 +132,10 @@ a, a:link, a:visited{
   float: right;
 }
 
+.right__icon--velog:hover, .right__icon--blog:hover, .right__icon--instagram:hover{
+  width: 26px;
+}
+
 .right__img{
   display: inline-block;
   margin-left: 5%;
@@ -121,43 +144,6 @@ a, a:link, a:visited{
   float: right;
   position: relative;
   top: -75px;
-}
-
-.icon:hover{
-  width: 26px;
-}
-
-.music img, .design img{
-  width: 100%;
-}
-
-/*This is for design.html*/
-h2 ~ img{
-  width: 100%;
-  padding-bottom: 10px;
-}
-
-button{
-  appearance: none;
-  border: none;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: transparent;
-  width:7%;
-  min-width: 50px;
-}
-
-button img{
-  width: 20px;
-}
-
-button img:hover{
-  width: 22px;
-}
-
-button:focus{
-  outline: none;
 }
 
 @media (max-width : 991px){
