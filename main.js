@@ -7,6 +7,10 @@ let app = http.createServer(function(request, response){
   let _url = request.url;
   let queryData = url.parse(_url, true).query;
   let folder = queryData.id;
+  let theme = queryData.theme;
+  if(theme == undefined){
+    theme = 'normal';
+  }
   let pathname = url.parse(_url, true).pathname;
   if(pathname === '/'){
     if(folder === undefined){
