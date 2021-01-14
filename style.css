@@ -1,175 +1,128 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap");
 /* div{
   border: 1px solid red;
 } */
-
-a, a:link, a:visited{
+a, a:link, a:visited {
   display: block;
   color: black;
-  text-decoration: none;
-}
+  text-decoration: none; }
 
-button{
+button {
   appearance: none;
   border: none;
   display: block;
   margin-left: auto;
   margin-right: auto;
   background-color: transparent;
-  width:7%;
-  min-width: 50px;
-}
+  width: 7%;
+  min-width: 50px; }
+  button img {
+    width: 20px; }
+    button img:hover {
+      width: 22px; }
+  button:focus {
+    outline: none; }
 
-button img{
-  width: 20px;
-}
-
-button img:hover{
-  width: 22px;
-}
-
-button:focus{
-  outline: none;
-}
-
-input[type=text]{
+input[type=text] {
   outline-style: none;
-  border:none;
+  border: none;
   border-radius: 3px;
   margin-top: 5px;
-  margin-bottom: 5px;
-}
+  margin-bottom: 5px; }
 
-input[type=file]{
-  display: none;
-}
+input[type=file] {
+  display: none; }
 
-input[type=submit]{
+input[type=submit] {
+  font-family: 'Roboto', 'Nanum Gothic', sans-serif;
+  font-size: 15px;
   background: none;
   border: none;
+  padding: 0; }
+  input[type=submit]:hover {
+    font-weight: 700; }
+
+textarea {
+  border: none; }
+
+body {
   font-family: 'Roboto', 'Nanum Gothic', sans-serif;
   font-size: 15px;
-  padding: 0;
-}
+  background-color: #d9d9d9; }
 
-input[type=submit]:hover{
-  font-weight: 700;
-}
-
-textarea{
-  border:none;
-}
-
-body{
-  background-color: #d9d9d9;
-  font-family: 'Roboto', 'Nanum Gothic', sans-serif;
-  font-size: 15px;
-}
-
-.top{
+.top {
   width: 100%;
-  height: 100px;
-}
+  height: 100px; }
 
-.left{
+.left {
   float: left;
-  width: 10%;
-}
+  width: 10%; }
+  .left a:hover {
+    font-weight: 700; }
 
-.middle__column--three{
-  column-width:270px;
-  column-gap: 15px;
-}
+.middle__column--three {
+  column-width: 270px;
+  column-gap: 15px; }
 
-.middle__column--two{
-  column-width:400px;
-  column-gap: 15px;
-}
+.middle__column--two {
+  column-width: 400px;
+  column-gap: 15px; }
 
-.middle__block{
+.middle__block {
   display: inline-block;
-  margin:0;
-  padding:0px 10px 0px 10px;
+  margin: 0;
+  padding: 0px 10px 0px 10px;
   width: 100%;
-  height: 100%;
-}
+  height: 100%; }
+  .middle__block img {
+    width: 100%;
+    padding-bottom: 5%; }
+  .middle__block a:hover {
+    font-weight: 700; }
 
-.middle__block img{
-  width: 100%;
-  padding-bottom: 5%;
-}
-
-.middle__block a:hover{
-  font-weight: 700;
-}
-
-.middle__file:hover{
-  font-weight: 700;
+.middle__file:hover {
   cursor: pointer;
-}
+  font-weight: 700; }
 
-.left a:hover{
-  font-weight: 700;
-}
-
-.middle{
+.middle {
   float: left;
-  width: 80%;
-}
+  width: 80%; }
 
-.middle__img--logo, .middle__img--contact{
+.middle__img--logo, .middle__img--contact {
   display: block;
   width: 100%;
   max-width: 500px;
   margin-left: auto;
-  margin-right: auto;
-}
+  margin-right: auto; }
 
-.right{
+.right {
   display: inline-block;
   float: right;
-  width: 10%;
-}
+  width: 10%; }
 
-.right__icon--velog, .right__icon--blog, .right__icon--instagram{
+.right__icon--velog, .right__icon--blog, .right__icon--instagram {
   display: inline-block;
   margin-left: 5%;
   margin-bottom: 5%;
   width: 25px;
-  float: right;
-}
+  float: right; }
+  .right__icon--velog:hover, .right__icon--blog:hover, .right__icon--instagram:hover {
+    width: 26px; }
 
-.right__icon--velog:hover, .right__icon--blog:hover, .right__icon--instagram:hover{
-  width: 26px;
-}
-
-.right__img{
+.right__img {
   display: inline-block;
   margin-left: 5%;
   margin-bottom: 5%;
   width: 100px;
   float: right;
   position: relative;
-  top: -75px;
-}
+  top: -75px; }
 
-@media (max-width : 991px){
-  .right__icon--velog, .right__icon--blog, .right__icon--instagram{
+@media (max-width: 991px) {
+  .right__icon--velog, .right__icon--blog, .right__icon--instagram {
     display: block;
     margin-left: 50%;
     margin-bottom: 5%;
     width: 25px;
-    float: right;
-  }
-}
-
-@media (max-width : 767px){
-  .middle_1, .middle_2, .middle_1over3, .middle_2over3, .middle_3over3{
-    float: left;
-    width: 100%;
-    padding-right: 0px;
-    padding-left: 5%;
-  }
-}
+    float: right; } }

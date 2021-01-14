@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+$theme__color--normal: #d9d9d9;
+$font__hover--weight: 700;
+
+@mixin font-style{
+  font-family: 'Roboto', 'Nanum Gothic', sans-serif;
+  font-size: 15px;
+}
+
+/* div{
+  border: 1px solid red;
+} */
+
+a, a:link, a:visited{
+  display: block;
+  color: black;
+  text-decoration: none;
+}
+
+button{
+  appearance: none;
+  border: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: transparent;
+  width:7%;
+  min-width: 50px;
+  img{
+    width: 20px;
+    &:hover{
+      width: 22px;
+    }
+  }
+  &:focus{
+    outline: none;
+  }
+}
+
+input{
+  &[type=text]{
+    outline-style: none;
+    border:none;
+    border-radius: 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  &[type=file]{
+    display: none;
+  }
+  &[type=submit]{
+    @include font-style;
+    background: none;
+    border: none;
+    padding: 0;
+    &:hover{
+      font-weight: $font__hover--weight;
+    }
+  }
+}
+
+textarea{
+  border:none;
+}
+
+body{
+  @include font-style;
+  background-color: $theme__color--normal;
+}
+
+.top{
+  width: 100%;
+  height: 100px;
+}
+
+.left{
+  float: left;
+  width: 10%;
+  a:hover{
+    font-weight: $font__hover--weight;
+  }
+}
+
+.middle__column--three{
+  column-width:270px;
+  column-gap: 15px;
+}
+
+.middle__column--two{
+  column-width:400px;
+  column-gap: 15px;
+}
+
+.middle__block{
+  display: inline-block;
+  margin:0;
+  padding:0px 10px 0px 10px;
+  width: 100%;
+  height: 100%;
+  img {
+    width: 100%;
+    padding-bottom: 5%;
+  }
+  a:hover{
+    font-weight: $font__hover--weight;
+  }
+}
+
+.middle__file:hover{
+  cursor: pointer;
+  font-weight: $font__hover--weight;
+}
+
+.middle{
+  float: left;
+  width: 80%;
+}
+
+.middle__img--logo, .middle__img--contact{
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.right{
+  display: inline-block;
+  float: right;
+  width: 10%;
+}
+
+.right__icon--velog, .right__icon--blog, .right__icon--instagram{
+  display: inline-block;
+  margin-left: 5%;
+  margin-bottom: 5%;
+  width: 25px;
+  float: right;
+  &:hover{
+    width: 26px;
+  }
+}
+
+.right__img{
+  display: inline-block;
+  margin-left: 5%;
+  margin-bottom: 5%;
+  width: 100px;
+  float: right;
+  position: relative;
+  top: -75px;
+}
+
+@media (max-width : 991px){
+  .right__icon--velog, .right__icon--blog, .right__icon--instagram{
+    display: block;
+    margin-left: 50%;
+    margin-bottom: 5%;
+    width: 25px;
+    float: right;
+  }
+}
