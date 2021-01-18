@@ -1,128 +1,128 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap");
 /* div{
   border: 1px solid red;
 } */
-
-.three{
-  column-width:270px;
-  column-gap: 15px;
-}
-
-.imgBlock{
-  display: inline-block;
-  margin:0;
-  padding:0px 10px 0px 10px;
-  width: 100%;
-}
-
-.imgBlock img{
-  width: 100%;
-  padding-bottom: 5%;
-}
-
-
-
-body{
-  background-color: #d9d9d9;
-  font-family: 'Roboto', 'Nanum Gothic', sans-serif;
-  font-size: 15px;
-}
-
-.top{
-  width: 100%;
-  height: 100px;
-}
-
-.left{
-  float: left;
-  width: 10%;
-}
-
-a, a:link, a:visited{
+a, a:link, a:visited {
   display: block;
   color: black;
-  text-decoration: none;
-}
+  text-decoration: none; }
 
-.left a:hover{
-  font-weight: 700;
-}
-
-.middle{
-  float: left;
-  width: 80%;
-}
-
-.middle .main-img{
-  display: block;
-  width: 100%;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.right{
-  display: inline-block;
-  float: right;
-  width: 10%;
-}
-
-.right img{
-  display: inline-block;
-  margin-left: 5%;
-  margin-bottom: 5%;
-  width: 25px;
-  float: right;
-}
-
-#logo-right{
-  width: 100px;
-  float: right;
-  position: relative;
-  top: -75px;
-}
-
-.icon:hover{
-  width: 26px;
-}
-
-/*This is for design.html*/
-h2 ~ img{
-  width: 100%;
-  padding-bottom: 10px;
-}
-
-button{
+button {
   appearance: none;
   border: none;
   display: block;
   margin-left: auto;
   margin-right: auto;
   background-color: transparent;
-  width:7%;
-  min-width: 50px;
-}
+  width: 7%;
+  min-width: 50px; }
+  button img {
+    width: 20px; }
+    button img:hover {
+      width: 22px; }
+  button:focus {
+    outline: none; }
 
-button img{
-  width: 20px;
-}
+input[type=text] {
+  outline-style: none;
+  border: none;
+  border-radius: 3px;
+  margin-top: 5px;
+  margin-bottom: 5px; }
 
-button img:hover{
-  width: 22px;
-}
+input[type=file] {
+  display: none; }
 
-button:focus{
-  outline: none;
-}
+input[type=submit] {
+  font-family: 'Roboto', 'Nanum Gothic', sans-serif;
+  font-size: 15px;
+  background: none;
+  border: none;
+  padding: 0; }
+  input[type=submit]:hover {
+    font-weight: 700; }
 
-@media (max-width : 991px){
-  .right img{
+textarea {
+  border: none; }
+
+body {
+  font-family: 'Roboto', 'Nanum Gothic', sans-serif;
+  font-size: 15px;
+  background-color: #d9d9d9; }
+
+.top {
+  width: 100%;
+  height: 100px; }
+
+.left {
+  float: left;
+  width: 10%; }
+  .left a:hover {
+    font-weight: 700; }
+
+.middle__column--three {
+  column-width: 270px;
+  column-gap: 15px; }
+
+.middle__column--two {
+  column-width: 400px;
+  column-gap: 15px; }
+
+.middle__block {
+  display: inline-block;
+  margin: 0;
+  padding: 0px 10px 0px 10px;
+  width: 100%;
+  height: 100%; }
+  .middle__block img {
+    width: 100%;
+    padding-bottom: 5%; }
+  .middle__block a:hover {
+    font-weight: 700; }
+
+.middle__file:hover {
+  cursor: pointer;
+  font-weight: 700; }
+
+.middle {
+  float: left;
+  width: 80%; }
+
+.middle__img--logo, .middle__img--contact {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto; }
+
+.right {
+  display: inline-block;
+  float: right;
+  width: 10%; }
+
+.right__icon--velog, .right__icon--blog, .right__icon--instagram {
+  display: inline-block;
+  margin-left: 5%;
+  margin-bottom: 5%;
+  width: 25px;
+  float: right; }
+  .right__icon--velog:hover, .right__icon--blog:hover, .right__icon--instagram:hover {
+    width: 26px; }
+
+.right__img {
+  display: inline-block;
+  margin-left: 5%;
+  margin-bottom: 5%;
+  width: 100px;
+  float: right;
+  position: relative;
+  top: -75px; }
+
+@media (max-width: 991px) {
+  .right__icon--velog, .right__icon--blog, .right__icon--instagram {
     display: block;
     margin-left: 50%;
     margin-bottom: 5%;
     width: 25px;
-    float: right;
-  }
-}
+    float: right; } }
